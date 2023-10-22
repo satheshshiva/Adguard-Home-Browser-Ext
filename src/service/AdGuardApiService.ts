@@ -12,7 +12,6 @@ const statusEndpoint="control/status"
 export default class AdGuardApiService {
   public static async getAdGuardStatusCombined(): Promise<AdGuardApiStatusEnum> {
     return new Promise<AdGuardApiStatusEnum>(resolve => {
-      console.log("getPiHoleStatusCombined()")
       this.getAdGuardStatus()
         .then(results => {
           for (const result of results) {
@@ -37,7 +36,6 @@ export default class AdGuardApiService {
   public static async getAdGuardStatus(): Promise<
     AxiosResponse<AdGuardApiStatus>[]
   > {
-    console.log("getPiHoleStatus()")
     const piHoleSettingsArray = await StorageService.getAdGuardSettingsArray()
     if (typeof piHoleSettingsArray === 'undefined') {
       return Promise.reject('PiHoleSettings empty')
@@ -67,7 +65,6 @@ export default class AdGuardApiService {
   public static async getAdGuardVersions(): Promise<
     AxiosResponse<AdGuardVersions>[]
   > {
-    console.log("getPiHoleVersions()")
     const piHoleSettingsArray = await StorageService.getAdGuardSettingsArray()
     if (typeof piHoleSettingsArray === 'undefined') {
       return Promise.reject('PiHoleSettings empty')
@@ -84,7 +81,6 @@ export default class AdGuardApiService {
   public static async getAdGuardVersion(
     piHole: AdGuardSettingsStorage
   ): Promise<AxiosResponse<AdGuardVersions>> {
-    console.log("getPiHoleVersion()")
     if (
       typeof piHole.adguard_uri_base === 'undefined' ||
       typeof piHole.username === 'undefined' ||
@@ -191,10 +187,6 @@ export default class AdGuardApiService {
   }
 
   private static getAxiosConfig(u:string, p:string): AxiosRequestConfig {
-    console.log("getAxiosConfig " )
-    console.log(u )
-    console.log("password " )
-    console.log(p )
     return {
       transformResponse: data => JSON.parse(data),
       auth: {
