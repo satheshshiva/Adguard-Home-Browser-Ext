@@ -42,7 +42,7 @@
 import { mdiAllInclusive, mdiCog, mdiTimerOutline } from '@mdi/js'
 import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
 import {
-  PiHoleSettingsDefaults,
+  AdGuardSettingsDefaults,
   StorageService
 } from '../../../../service/StorageService'
 import { PiHoleApiStatus } from '../../../../api/models/PiHoleApiStatus'
@@ -73,7 +73,7 @@ export default defineComponent({
     const sliderDisabled = ref(!props.isActiveByBadge)
     const defaultDisableTimeDisabled = ref(!props.isActiveByBadge)
     const defaultDisableTime = ref<number>(
-      PiHoleSettingsDefaults.default_disable_time
+      AdGuardSettingsDefaults.default_disable_time
     )
 
     const timeUnitIcon = computed(() =>

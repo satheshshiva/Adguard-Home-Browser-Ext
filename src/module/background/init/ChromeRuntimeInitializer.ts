@@ -1,7 +1,7 @@
 import { Initializer } from '../../general/Initializer'
 import { LinkConfig } from '../../../service/i18NService'
 import {
-  PiHoleSettingsDefaults,
+  AdGuardSettingsDefaults,
   StorageService
 } from '../../../service/StorageService'
 
@@ -10,7 +10,7 @@ export default class ChromeRuntimeInitializer implements Initializer {
     chrome.runtime.onInstalled.addListener(details => {
       if (details.reason === 'install') {
         StorageService.saveDefaultDisableTime(
-          Number(PiHoleSettingsDefaults.default_disable_time)
+          Number(AdGuardSettingsDefaults.default_disable_time)
         )
         StorageService.saveReloadAfterDisable(true)
         StorageService.saveReloadAfterWhitelist(true)

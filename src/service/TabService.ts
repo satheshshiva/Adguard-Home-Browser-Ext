@@ -28,8 +28,8 @@ export default class TabService {
     const piHoleUrlsArray: Array<string> = []
     if (typeof piHoleUrls !== 'undefined') {
       piHoleUrls.forEach((value: PiHoleSettingsStorage) => {
-        if (value.pi_uri_base) {
-          piHoleUrlsArray.push(new URL(value.pi_uri_base).hostname)
+        if (value.adguard_uri_base) {
+          piHoleUrlsArray.push(new URL(value.adguard_uri_base).hostname)
         }
       })
     }

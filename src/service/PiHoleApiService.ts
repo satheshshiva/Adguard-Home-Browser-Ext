@@ -43,13 +43,13 @@ export default class PiHoleApiService {
 
     for (const piHole of piHoleSettingsArray) {
       if (
-        typeof piHole.pi_uri_base === 'undefined' ||
-        typeof piHole.api_key === 'undefined'
+        typeof piHole.adguard_uri_base === 'undefined' ||
+        typeof piHole.password === 'undefined'
       ) {
         return Promise.reject('Some PiHoleSettings are undefined.')
       }
 
-      const url = this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key)
+      const url = this.getPiHoleBaseUrl(piHole.adguard_uri_base, piHole.password)
 
       url.searchParams.append('status', '')
       promiseArray.push(
@@ -80,12 +80,12 @@ export default class PiHoleApiService {
     piHole: PiHoleSettingsStorage
   ): Promise<AxiosResponse<PiHoleVersions>> {
     if (
-      typeof piHole.pi_uri_base === 'undefined' ||
-      typeof piHole.api_key === 'undefined'
+      typeof piHole.adguard_uri_base === 'undefined' ||
+      typeof piHole.password === 'undefined'
     ) {
       return Promise.reject('Some PiHoleSettings are undefined.')
     }
-    const url = this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key)
+    const url = this.getPiHoleBaseUrl(piHole.adguard_uri_base, piHole.password)
 
     url.searchParams.append('versions', '')
     return axios.get<PiHoleVersions>(url.href, this.getAxiosConfig())
@@ -108,13 +108,13 @@ export default class PiHoleApiService {
 
     for (const piHole of piHoleSettingsArray) {
       if (
-        typeof piHole.pi_uri_base === 'undefined' ||
-        typeof piHole.api_key === 'undefined'
+        typeof piHole.adguard_uri_base === 'undefined' ||
+        typeof piHole.password === 'undefined'
       ) {
         return Promise.reject('Some PiHoleSettings are undefined.')
       }
 
-      const url = this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key)
+      const url = this.getPiHoleBaseUrl(piHole.adguard_uri_base, piHole.password)
 
       if (mode === PiHoleApiStatusEnum.disabled) {
         url.searchParams.append('disable', time.toString())
@@ -165,12 +165,12 @@ export default class PiHoleApiService {
 
     for (const piHole of piHoleSettingsArray) {
       if (
-        typeof piHole.pi_uri_base === 'undefined' ||
-        typeof piHole.api_key === 'undefined'
+        typeof piHole.adguard_uri_base === 'undefined' ||
+        typeof piHole.password === 'undefined'
       ) {
         return Promise.reject('Some PiHoleSettings are undefined.')
       }
-      const url = this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key)
+      const url = this.getPiHoleBaseUrl(piHole.adguard_uri_base, piHole.password)
       url.searchParams.append('list', list)
       url.searchParams.append(mode, domain)
       promiseArray.push(

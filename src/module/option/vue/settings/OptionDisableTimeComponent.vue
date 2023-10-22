@@ -13,7 +13,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from '@vue/composition-api'
 import {
-  PiHoleSettingsDefaults,
+  AdGuardSettingsDefaults,
   StorageService
 } from '../../../../service/StorageService'
 import useTranslation from '../../../../hooks/translation'
@@ -22,7 +22,7 @@ export default defineComponent({
   name: 'OptionGenericCheckboxComponent',
   setup: () => {
     const { translate, I18NOptionKeys } = useTranslation()
-    const disableTime = ref(PiHoleSettingsDefaults.default_disable_time)
+    const disableTime = ref(AdGuardSettingsDefaults.default_disable_time)
 
     const updateDisableTime = () => {
       StorageService.getDefaultDisableTime().then(time => {

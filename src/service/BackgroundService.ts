@@ -1,6 +1,6 @@
 import PiHoleApiStatusEnum from '../api/enum/PiHoleApiStatusEnum'
 import { BadgeService, ExtensionBadgeTextEnum } from './BadgeService'
-import { PiHoleSettingsDefaults, StorageService } from './StorageService'
+import { AdGuardSettingsDefaults, StorageService } from './StorageService'
 import PiHoleApiService from './PiHoleApiService'
 import TabService from './TabService'
 import ApiList from '../api/enum/ApiList'
@@ -20,7 +20,7 @@ export default class BackgroundService {
       StorageService.getDefaultDisableTime().then(value => {
         let disableTime = value
         if (typeof disableTime === 'undefined') {
-          disableTime = PiHoleSettingsDefaults.default_disable_time
+          disableTime = AdGuardSettingsDefaults.default_disable_time
         }
 
         PiHoleApiService.changePiHoleStatus(newStatus, disableTime)

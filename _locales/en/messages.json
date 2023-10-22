@@ -61,8 +61,8 @@
 	"options_reload_after_white_list": {
 		"message": "Reload current tab after Whitelisting"
 	},
-	"options_api_key": {
-		"message": "API Key"
+	"options_password": {
+		"message": "Password"
 	},
 	"options_pi_hole_address": {
 		"message": "AdGuard Home Address"
@@ -78,8 +78,8 @@
 			}
 		}
 	},
-	"options_api_key_invalid_warning": {
-		"message": "Api Key doesn't match scheme (64 chars long). It may be invalid!"
+	"options_password_invalid_warning": {
+		"message": "Invalid Password"
 	},
 	"options_url_invalid_warning": {
 		"message": "The url is invalid. (Missing http(s), invalid scheme or empty)"

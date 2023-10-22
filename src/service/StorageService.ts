@@ -1,10 +1,10 @@
 export interface PiHoleSettingsStorage {
-  pi_uri_base?: string
-  api_key?: string
+  adguard_uri_base?: string
+  password?: string
 }
 
-export enum PiHoleSettingsDefaults {
-  pi_uri_base = 'http://pi.hole/admin',
+export enum AdGuardSettingsDefaults {
+  adguard_uri_base = 'http://adguard/',
   default_disable_time = 10
 }
 
@@ -35,7 +35,7 @@ export class StorageService {
   ): void {
     if (settings.length > 0) {
       const filteredSettings: PiHoleSettingsStorage[] = settings.filter(
-        value => value.pi_uri_base
+        value => value.adguard_uri_base
       )
 
       if (filteredSettings.length < 1) {
@@ -49,8 +49,8 @@ export class StorageService {
       for (const setting of filteredSettings) {
         const secureSetting: PiHoleSettingsStorage = {}
 
-        secureSetting.pi_uri_base = String(setting.pi_uri_base)
-        secureSetting.api_key = String(setting.api_key)
+        secureSetting.adguard_uri_base = String(setting.adguard_uri_base)
+        secureSetting.password = String(setting.password)
 
         secureSettings.push(secureSetting)
       }

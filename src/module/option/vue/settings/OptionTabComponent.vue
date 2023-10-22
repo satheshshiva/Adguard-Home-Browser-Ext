@@ -6,7 +6,7 @@
         :key="'dyn-tab-' + index"
         @click="resetConnectionCheckAndCheck"
       >
-        PiHole {{ index + 1 }}
+        Instance {{ index + 1 }}
       </v-tab>
     </v-tabs>
     <v-tabs-items v-model="currentTab">
@@ -16,11 +16,11 @@
         class="mt-5"
       >
         <v-text-field
-          v-model="pi_hole_setting.pi_uri_base"
+          v-model="pi_hole_setting.adguard_uri_base"
           v-debounce:500ms="connectionCheck"
           outlined
           debounce-events="input"
-          :placeholder="PiHoleSettingsDefaults.pi_uri_base"
+          :placeholder="AdGuardSettingsDefaults.adguard_uri_base"
           :rules="[
             v =>
               isInvalidUrlSchema(v) ||
@@ -30,7 +30,7 @@
           required
         ></v-text-field>
         <v-text-field
-          v-model="pi_hole_setting.api_key"
+          v-model="pi_hole_setting.password"
           outlined
           :type="passwordInputType"
           :append-icon="
@@ -39,9 +39,9 @@
           :rules="[
             v =>
               isInvalidApiKey(v) ||
-              translate(I18NOptionKeys.options_api_key_invalid_warning)
+              translate(I18NOptionKeys.options_password_invalid_warning)
           ]"
-          :label="translate(I18NOptionKeys.options_api_key)"
+          :label="translate(I18NOptionKeys.options_password)"
           @click:append="toggleApiKeyVisibility"
         ></v-text-field>
 
@@ -129,8 +129,8 @@ export default defineComponent({
   setup: () => {
     const tabs = ref<PiHoleSettingsStorage[]>([
       {
-        pi_uri_base: '',
-        api_key: ''
+        adguard_uri_base: '',
+        password: ''
       }
     ])
 
@@ -188,18 +188,18 @@ export default defineComponent({
       tabs,
       () => {
         for (const piHoleSetting of tabs.value) {
-          if (typeof piHoleSetting.pi_uri_base !== 'undefined') {
-            piHoleSetting.pi_uri_base = piHoleSetting.pi_uri_base.replace(
+          if (typeof piHoleSetting.adguard_uri_base !== 'undefined') {
+            piHoleSetting.adguard_uri_base = piHoleSetting.adguard_uri_base.replace(
               /\s+/g,
               ''
             )
           } else {
-            piHoleSetting.pi_uri_base = ''
+            piHoleSetting.adguard_uri_base = ''
           }
-          if (typeof piHoleSetting.api_key !== 'undefined') {
-            piHoleSetting.api_key = piHoleSetting.api_key.replace(/\s+/g, '')
+          if (typeof piHoleSetting.password !== 'undefined') {
+            piHoleSetting.password = piHoleSetting.password.replace(/\s+/g, '')
           } else {
-            piHoleSetting.api_key = ''
+            piHoleSetting.password = ''
           }
         }
         StorageService.savePiHoleSettingsArray(tabs.value)
@@ -222,7 +222,7 @@ export default defineComponent({
 
     const addNewPiHole = () => {
       resetConnectionCheckAndCheck()
-      tabs.value.push({ pi_uri_base: '', api_key: '' })
+      tabs.value.push({ adguard_uri_base: '', password: '' })
       setTimeout(() => {
         currentTab.value = tabs.value.length - 1
       }, 0)

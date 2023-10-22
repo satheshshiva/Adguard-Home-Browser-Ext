@@ -4,13 +4,13 @@ import {
   I18NService,
   LinkConfig
 } from '../service/i18NService'
-import { PiHoleSettingsDefaults } from '../service/StorageService'
+import { AdGuardSettingsDefaults } from '../service/StorageService'
 
 export default function useTranslation() {
   return {
     I18NPopupKeys,
     I18NOptionKeys,
-    PiHoleSettingsDefaults,
+    AdGuardSettingsDefaults,
     LinkConfig,
     translate: I18NService.translate
   }
