@@ -9,7 +9,7 @@
       </v-btn>
       <p>{{ translate(I18NOptionKeys.option_about_copy_debug) }}</p>
       <p ref="versionInfoElement">
-        PiHole Browser Extension: {{ extensionVersion }} <br />Operating System:
+        AdGuard Home Browser Extension: {{ extensionVersion }} <br />Operating System:
         {{ platform }} <br />Browser: {{ browser }}
       </p>
       <v-btn @click="copyToClipboard">

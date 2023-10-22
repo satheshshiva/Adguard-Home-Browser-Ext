@@ -7,7 +7,7 @@
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title class="text-h6">
-            PiHole
+            AdGuard Home
             <br />Browser <br />Extension
           </v-list-item-title>
         </v-list-item-content>
@@ -39,33 +39,6 @@
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-divider />
-        <v-list-item
-          link
-          :href="LinkConfig.paypal_donation_link"
-          target="_blank"
-        >
-          <v-list-item-icon>
-            <v-icon>{{ mdiGift }}</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title
-              >{{ translate(I18NOptionKeys.option_donation) }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item link :href="LinkConfig.github_issue" target="_blank">
-          <v-list-item-icon>
-            <v-icon>{{ mdiFire }}</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title
-              >{{ translate(I18NOptionKeys.option_troubleshooting) }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
       </v-list>
       <template #append>
         <v-alert color="primary" outlined class="mx-5">
@@ -93,7 +66,7 @@ export default defineComponent({
 
     const copyrightText = computed(() => {
       const year = new Date().getFullYear()
-      return `(C) ${year} - Pascal Glaser`
+      return `(C) ${year} - Sathesh Sivashanmugam`
     })
 
     return {

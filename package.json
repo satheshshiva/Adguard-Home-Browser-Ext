@@ -65,7 +65,7 @@
 		"vue",
 		"typescript"
 	],
-	"author": "Pascal Glaser",
+	"author": "Sathesh Sivashanmugam",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/badsgahhl/pihole-browser-extension/issues"

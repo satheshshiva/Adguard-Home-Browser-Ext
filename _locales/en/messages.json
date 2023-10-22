@@ -1,9 +1,9 @@
 {
 	"manifest_description": {
-		"message": "Browser extension to control your PiHole. Built with Vue, Typescript and ❤"
+		"message": "Browser extension to control your AdGuard Home. Built with Vue and Typescript"
 	},
 	"options_title": {
-		"message": "$page$ - PiHole Browser Extension",
+		"message": "$page$ - AdGuard Home Browser Extension",
 		"placeholders": {
 			"page": {
 				"content": "$1"
@@ -44,10 +44,10 @@
 		"message": "Donate"
 	},
 	"options_headline_info": {
-		"message": "PiHole Configuration"
+		"message": "AdGuard Home Configuration"
 	},
 	"options_headline_additional_info": {
-		"message": "Enter the address and the API Key, which you can find under API/Web interface in your PiHole settings."
+		"message": "Enter the address and the API Key, which you can find under API/Web interface in your AdGuard Home settings."
 	},
 	"options_default_time_label": {
 		"message": "Default disable time:"
@@ -65,13 +65,13 @@
 		"message": "API Key"
 	},
 	"options_pi_hole_address": {
-		"message": "PiHole Address"
+		"message": "AdGuard Home Address"
 	},
 	"options_add_button": {
-		"message": "Add PiHole"
+		"message": "Add AdGuard Home"
 	},
 	"options_remove_button": {
-		"message": "Remove PiHole $num$",
+		"message": "Remove AdGuard Home $num$",
 		"placeholders": {
 			"num": {
 				"content": "$1"
@@ -91,7 +91,7 @@
 		"message": "Disable update notification in the popup"
 	},
 	"popup_status_card_title": {
-		"message": "PiHole Switch"
+		"message": "AdGuard Home Switch"
 	},
 	"popup_status_card_info_text": {
 		"message": "0 for permanent"
@@ -112,10 +112,10 @@
 		"message": "Disable the context menu shortcuts"
 	},
 	"popup_update_card_info": {
-		"message": "Update available for PiHole"
+		"message": "Update available for AdGuard Home"
 	},
 	"context_menu_toggle_pi_holes": {
-		"message": "Toggle PiHole(s)"
+		"message": "Toggle AdGuard Home(s)"
 	},
 	"context_menu_blacklist_current_domain": {
 		"message": "Blacklist current domain"
@@ -133,9 +133,9 @@
 		"message": " Connection successful"
 	},
 	"option_connection_check_error": {
-		"message": "Connection not successfully"
+		"message": "Connection unsucessful"
 	},
 	"option_connection_check_update_available": {
-		"message": "Update available for PiHole"
+		"message": "Update available for AdGuard Home"
 	}
 }

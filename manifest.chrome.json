@@ -1,8 +1,8 @@
 {
 	"manifest_version": 2,
-	"name": "PiHole Browser Extension",
+	"name": "AdGuard Home Browser Extension",
 	"version": "3.0.2",
-	"author": "Pascal Glaser",
+	"author": "Sathesh Sivashanmugam",
 	"description": "__MSG_manifest_description__",
 	"default_locale": "en",
 	"icons": {

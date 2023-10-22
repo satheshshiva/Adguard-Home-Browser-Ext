@@ -9,12 +9,8 @@
       <p>
         {{ translate(I18NOptionKeys.option_contributors) }}
         <br />
-        <a :href="LinkConfig.github_user_badsgahhl" target="_blank">
-          Pascal Glaser
-        </a>
-        <br />
-        <a :href="LinkConfig.github_user_erikr729" target="_blank">
-          Erik Rill
+        <a :href="LinkConfig.github_user_satheshshiva" target="_blank">
+          Sathesh Sivashanmugam
         </a>
       </p>
     </v-card-text>
