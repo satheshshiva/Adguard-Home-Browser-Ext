@@ -61,6 +61,9 @@
 	"options_reload_after_white_list": {
 		"message": "Reload current tab after Whitelisting"
 	},
+	"options_username": {
+		"message": "Username"
+	},
 	"options_password": {
 		"message": "Password"
 	},

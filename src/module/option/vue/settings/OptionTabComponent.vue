@@ -30,17 +30,19 @@
           required
         ></v-text-field>
         <v-text-field
+          v-model="pi_hole_setting.username"
+          outlined
+          :type="text"
+          :label="translate(I18NOptionKeys.options_username)"
+        ></v-text-field>
+        <v-text-field
           v-model="pi_hole_setting.password"
           outlined
           :type="passwordInputType"
           :append-icon="
             passwordInputType === 'password' ? mdiEyeOutline : mdiEyeOffOutline
           "
-          :rules="[
-            v =>
-              isInvalidApiKey(v) ||
-              translate(I18NOptionKeys.options_password_invalid_warning)
-          ]"
+          
           :label="translate(I18NOptionKeys.options_password)"
           @click:append="toggleApiKeyVisibility"
         ></v-text-field>
@@ -51,7 +53,7 @@
           </v-btn>
           <v-btn
             v-if="tabs.length > 1"
-            @click.prevent="removePiHole(currentTab)"
+            @click.prevent="removeInstance(currentTab)"
             >{{
               translate(I18NOptionKeys.options_remove_button, [
                 String(currentTab + 1)
@@ -220,24 +222,21 @@ export default defineComponent({
       }
     }
 
-    const addNewPiHole = () => {
+    const addNewInstance = () => {
       resetConnectionCheckAndCheck()
-      tabs.value.push({ adguard_uri_base: '', password: '' })
+      tabs.value.push({ adguard_uri_base: '', username: '', password: '' })
       setTimeout(() => {
         currentTab.value = tabs.value.length - 1
       }, 0)
     }
 
-    const removePiHole = (index: number) => {
+    const removeInstance = (index: number) => {
       resetConnectionCheckAndCheck()
       tabs.value.splice(index, 1)
     }
 
-    const isInvalidApiKey = (apiKey: string) =>
-      !(!apiKey.match('^[a-f0-9]{64}$') && apiKey.length !== 0)
-
-    const isInvalidUrlSchema = (piHoleUrl: string) =>
-      !(!piHoleUrl.match('^(http|https):\\/\\/[^ "]+$') || piHoleUrl.length < 1)
+    const isInvalidUrlSchema = (url: string) =>
+      !(!url.match('^(http|https):\\/\\/[^ "]+$') || url.length < 1)
 
     return {
       mdiEyeOutline,
@@ -247,10 +246,9 @@ export default defineComponent({
       passwordInputType,
       connectionCheck,
       resetConnectionCheckAndCheck,
-      isInvalidApiKey,
       isInvalidUrlSchema,
-      removePiHole,
-      addNewPiHole,
+      removeInstance,
+      addNewInstance,
       toggleApiKeyVisibility,
       connectionCheckVersionText,
       connectionCheckStatus,

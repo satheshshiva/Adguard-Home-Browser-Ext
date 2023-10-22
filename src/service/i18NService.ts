@@ -29,6 +29,7 @@ export enum I18NOptionKeys {
   options_default_time_unit = 'options_default_time_unit',
   options_reload_after_disable = 'options_reload_after_disable',
   options_reload_after_white_list = 'options_reload_after_white_list',
+  options_username = 'options_username',
   options_password = 'options_password',
   options_pi_hole_address = 'options_pi_hole_address',
   options_add_button = 'options_add_button',

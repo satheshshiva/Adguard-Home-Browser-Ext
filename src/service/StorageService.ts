@@ -1,5 +1,6 @@
 export interface PiHoleSettingsStorage {
   adguard_uri_base?: string
+  username?: string
   password?: string
 }
 
@@ -50,6 +51,7 @@ export class StorageService {
         const secureSetting: PiHoleSettingsStorage = {}
 
         secureSetting.adguard_uri_base = String(setting.adguard_uri_base)
+        secureSetting.username = String(setting.username)
         secureSetting.password = String(setting.password)
 
         secureSettings.push(secureSetting)
