@@ -7,9 +7,12 @@ import ApiListMode from '../api/enum/ApiListMode'
 import ApiList from '../api/enum/ApiList'
 import PiHoleApiStatusEnum from '../api/enum/PiHoleApiStatusEnum'
 
+const statusEndpoint="control/status"
+
 export default class PiHoleApiService {
   public static async getPiHoleStatusCombined(): Promise<PiHoleApiStatusEnum> {
     return new Promise<PiHoleApiStatusEnum>(resolve => {
+      console.log("getPiHoleStatusCombined()")
       this.getPiHoleStatus()
         .then(results => {
           for (const result of results) {
@@ -34,6 +37,7 @@ export default class PiHoleApiService {
   public static async getPiHoleStatus(): Promise<
     AxiosResponse<PiHoleApiStatus>[]
   > {
+    console.log("getPiHoleStatus()")
     const piHoleSettingsArray = await StorageService.getPiHoleSettingsArray()
     if (typeof piHoleSettingsArray === 'undefined') {
       return Promise.reject('PiHoleSettings empty')
@@ -43,17 +47,17 @@ export default class PiHoleApiService {
 
     for (const piHole of piHoleSettingsArray) {
       if (
-        typeof piHole.adguard_uri_base === 'undefined' ||
+        typeof piHole.adguard_uri_base === 'undefined' || 
+        typeof piHole.username === 'undefined' ||
         typeof piHole.password === 'undefined'
       ) {
         return Promise.reject('Some PiHoleSettings are undefined.')
       }
 
-      const url = this.getPiHoleBaseUrl(piHole.adguard_uri_base, piHole.password)
+      const url = this.getPiHoleBaseUrl(piHole.adguard_uri_base, statusEndpoint)
 
-      url.searchParams.append('status', '')
       promiseArray.push(
-        axios.get<PiHoleApiStatus>(url.href, this.getAxiosConfig())
+        axios.get<PiHoleApiStatus>(url.href, this.getAxiosConfig(piHole.username, piHole.password))
       )
     }
 
@@ -63,14 +67,15 @@ export default class PiHoleApiService {
   public static async getPiHoleVersions(): Promise<
     AxiosResponse<PiHoleVersions>[]
   > {
+    console.log("getPiHoleVersions()")
     const piHoleSettingsArray = await StorageService.getPiHoleSettingsArray()
     if (typeof piHoleSettingsArray === 'undefined') {
       return Promise.reject('PiHoleSettings empty')
     }
     const promiseArray = new Array<Promise<AxiosResponse<PiHoleVersions>>>()
 
-    for (const piHole of piHoleSettingsArray) {
-      promiseArray.push(this.getPiHoleVersion(piHole))
+    for (const instance of piHoleSettingsArray) {
+      promiseArray.push(this.getPiHoleVersion(instance))
     }
 
     return Promise.all(promiseArray)
@@ -79,16 +84,17 @@ export default class PiHoleApiService {
   public static async getPiHoleVersion(
     piHole: AdGuardSettingsStorage
   ): Promise<AxiosResponse<PiHoleVersions>> {
+    console.log("getPiHoleVersion()")
     if (
       typeof piHole.adguard_uri_base === 'undefined' ||
+      typeof piHole.username === 'undefined' ||
       typeof piHole.password === 'undefined'
     ) {
       return Promise.reject('Some PiHoleSettings are undefined.')
     }
-    const url = this.getPiHoleBaseUrl(piHole.adguard_uri_base, piHole.password)
+    const url = this.getPiHoleBaseUrl(piHole.adguard_uri_base, statusEndpoint)
 
-    url.searchParams.append('versions', '')
-    return axios.get<PiHoleVersions>(url.href, this.getAxiosConfig())
+    return axios.get<PiHoleVersions>(url.href, this.getAxiosConfig(piHole.username, piHole.password))
   }
 
   public static async changePiHoleStatus(
@@ -109,23 +115,25 @@ export default class PiHoleApiService {
     for (const piHole of piHoleSettingsArray) {
       if (
         typeof piHole.adguard_uri_base === 'undefined' ||
+        typeof piHole.username === 'undefined' ||
         typeof piHole.password === 'undefined'
       ) {
         return Promise.reject('Some PiHoleSettings are undefined.')
       }
 
-      const url = this.getPiHoleBaseUrl(piHole.adguard_uri_base, piHole.password)
-
+      const url = this.getPiHoleBaseUrl(piHole.adguard_uri_base, "control/protection")
+      let data
       if (mode === PiHoleApiStatusEnum.disabled) {
-        url.searchParams.append('disable', time.toString())
+        data = {enabled: false}
       } else if (mode === PiHoleApiStatusEnum.enabled) {
-        url.searchParams.append('enable', '')
+        data = {enabled: true,
+                duration: time}
       } else {
         return Promise.reject(`Mode ${mode} not allowed for this function.`)
       }
 
       promiseArray.push(
-        axios.get<PiHoleApiStatus>(url.href, this.getAxiosConfig())
+        axios.post<PiHoleApiStatus>(url.href, data, this.getAxiosConfig(piHole.username, piHole.password))
       )
     }
 
@@ -166,6 +174,7 @@ export default class PiHoleApiService {
     for (const piHole of piHoleSettingsArray) {
       if (
         typeof piHole.adguard_uri_base === 'undefined' ||
+        typeof piHole.username === 'undefined' ||
         typeof piHole.password === 'undefined'
       ) {
         return Promise.reject('Some PiHoleSettings are undefined.')
@@ -174,33 +183,39 @@ export default class PiHoleApiService {
       url.searchParams.append('list', list)
       url.searchParams.append(mode, domain)
       promiseArray.push(
-        axios.get<PiHoleListStatus>(url.href, this.getAxiosConfig())
+        axios.get<PiHoleListStatus>(url.href, this.getAxiosConfig(piHole.username, piHole.password))
       )
     }
 
     return Promise.all(promiseArray)
   }
 
-  private static getAxiosConfig(): AxiosRequestConfig {
+  private static getAxiosConfig(u:string, p:string): AxiosRequestConfig {
+    console.log("getAxiosConfig " )
+    console.log(u )
+    console.log("password " )
+    console.log(p )
     return {
-      transformResponse: data => JSON.parse(data)
+      transformResponse: data => JSON.parse(data),
+      auth: {
+        username: u,
+        password: p
+      }
     }
   }
 
-  private static getPiHoleBaseUrl(domain: string, apiKey?: string): URL {
+  private static getPiHoleBaseUrl(domain: string, endpoint?: string): URL {
     let domainPrepared = domain
     if (domain.slice(-1) !== '/') {
       domainPrepared += '/'
     }
-    const baseUrl = new URL('api.php', domainPrepared)
-
-    let correctApiKey
-    if (typeof apiKey === 'undefined' || apiKey.length < 1) {
-      correctApiKey = ''
+    let correctEndpoint
+    if (typeof endpoint === 'undefined' || endpoint.length < 1) {
+      correctEndpoint = ''
     } else {
-      correctApiKey = apiKey
+      correctEndpoint = endpoint
     }
-    baseUrl.searchParams.append('auth', correctApiKey)
-    return baseUrl
+
+    return new URL(correctEndpoint, domainPrepared)
   }
 }

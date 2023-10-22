@@ -27,7 +27,7 @@ export default defineComponent({
 
       updatesAvailable.value =
         (await PiHoleApiService.getPiHoleVersions()).filter(
-          ({ data }) => data.core_update || data.web_update || data.FTL_update
+          ({ data }) => data.version
         ).length > 0
     }
 

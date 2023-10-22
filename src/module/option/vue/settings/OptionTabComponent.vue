@@ -32,7 +32,6 @@
         <v-text-field
           v-model="pi_hole_setting.username"
           outlined
-          :type="text"
           :label="translate(I18NOptionKeys.options_username)"
         ></v-text-field>
         <v-text-field
@@ -132,6 +131,7 @@ export default defineComponent({
     const tabs = ref<AdGuardSettingsStorage[]>([
       {
         adguard_uri_base: '',
+        username: '',
         password: ''
       }
     ])
@@ -198,6 +198,11 @@ export default defineComponent({
           } else {
             piHoleSetting.adguard_uri_base = ''
           }
+          if (typeof piHoleSetting.username !== 'undefined') {
+            piHoleSetting.username = piHoleSetting.username.replace(/\s+/g, '')
+          } else {
+            piHoleSetting.username = ''
+          }
           if (typeof piHoleSetting.password !== 'undefined') {
             piHoleSetting.password = piHoleSetting.password.replace(/\s+/g, '')
           } else {
@@ -211,7 +216,7 @@ export default defineComponent({
 
     const connectionCheckVersionText = computed(() => {
       const data = connectionCheckData.value
-      return `Core: ${data?.core_current} FTL: ${data?.FTL_current} Web: ${data?.web_current}`
+      return `Version: ${data?.version} Status: ${data?.running} Protection: ${data?.protection_enabled}`
     })
 
     const toggleApiKeyVisibility = () => {

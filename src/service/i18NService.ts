@@ -36,7 +36,6 @@ export enum I18NOptionKeys {
   options_remove_button = 'options_remove_button',
   options_password_invalid_warning = 'options_password_invalid_warning',
   options_url_invalid_warning = 'options_url_invalid_warning',
-  option_donation = 'option_donation',
   option_disable_feature = 'options_disable_list_feature',
   option_disable_update_notification = 'option_disable_update_notification',
   option_hotkey_settings = 'option_hotkey_settings',
