@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { PiHoleApiStatus } from '../api/models/PiHoleApiStatus'
-import { PiHoleSettingsStorage, StorageService } from './StorageService'
+import { AdGuardSettingsStorage, StorageService } from './StorageService'
 import { PiHoleListStatus } from '../api/models/PiHoleListStatus'
 import { PiHoleVersions } from '../api/models/PiHoleVersions'
 import ApiListMode from '../api/enum/ApiListMode'
@@ -77,7 +77,7 @@ export default class PiHoleApiService {
   }
 
   public static async getPiHoleVersion(
-    piHole: PiHoleSettingsStorage
+    piHole: AdGuardSettingsStorage
   ): Promise<AxiosResponse<PiHoleVersions>> {
     if (
       typeof piHole.adguard_uri_base === 'undefined' ||

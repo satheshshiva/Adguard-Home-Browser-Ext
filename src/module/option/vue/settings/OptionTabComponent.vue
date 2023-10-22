@@ -108,7 +108,7 @@ import {
 } from '@vue/composition-api'
 import { mdiEyeOffOutline, mdiEyeOutline } from '@mdi/js'
 import {
-  PiHoleSettingsStorage,
+  AdGuardSettingsStorage,
   StorageService
 } from '../../../../service/StorageService'
 import { PiHoleVersions } from '../../../../api/models/PiHoleVersions'
@@ -129,7 +129,7 @@ enum PasswordInputType {
 export default defineComponent({
   name: 'OptionTabComponent',
   setup: () => {
-    const tabs = ref<PiHoleSettingsStorage[]>([
+    const tabs = ref<AdGuardSettingsStorage[]>([
       {
         adguard_uri_base: '',
         password: ''

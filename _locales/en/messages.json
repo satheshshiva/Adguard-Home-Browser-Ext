@@ -47,7 +47,7 @@
 		"message": "AdGuard Home Configuration"
 	},
 	"options_headline_additional_info": {
-		"message": "Enter the address and the API Key, which you can find under API/Web interface in your AdGuard Home settings."
+		"message": "Enter the URL, username and password you will use to login to the AdGuard Home"
 	},
 	"options_default_time_label": {
 		"message": "Default disable time:"

@@ -1,4 +1,4 @@
-export interface PiHoleSettingsStorage {
+export interface AdGuardSettingsStorage {
   adguard_uri_base?: string
   username?: string
   password?: string
@@ -10,7 +10,7 @@ export enum AdGuardSettingsDefaults {
 }
 
 export interface ExtensionStorage {
-  pi_hole_settings?: PiHoleSettingsStorage[]
+  pi_hole_settings?: AdGuardSettingsStorage[]
   default_disable_time?: number
   reload_after_disable?: boolean
   reload_after_white_list?: boolean
@@ -32,10 +32,10 @@ export enum ExtensionStorageEnum {
 
 export class StorageService {
   public static savePiHoleSettingsArray(
-    settings: PiHoleSettingsStorage[]
+    settings: AdGuardSettingsStorage[]
   ): void {
     if (settings.length > 0) {
-      const filteredSettings: PiHoleSettingsStorage[] = settings.filter(
+      const filteredSettings: AdGuardSettingsStorage[] = settings.filter(
         value => value.adguard_uri_base
       )
 
@@ -44,11 +44,11 @@ export class StorageService {
         return
       }
 
-      const secureSettings: PiHoleSettingsStorage[] = []
+      const secureSettings: AdGuardSettingsStorage[] = []
 
       // Type Assertion
       for (const setting of filteredSettings) {
-        const secureSetting: PiHoleSettingsStorage = {}
+        const secureSetting: AdGuardSettingsStorage = {}
 
         secureSetting.adguard_uri_base = String(setting.adguard_uri_base)
         secureSetting.username = String(setting.username)
@@ -108,9 +108,9 @@ export class StorageService {
   }
 
   public static getPiHoleSettingsArray(): Promise<
-    PiHoleSettingsStorage[] | undefined
+    AdGuardSettingsStorage[] | undefined
   > {
-    return this.getStorageValue<PiHoleSettingsStorage[]>(
+    return this.getStorageValue<AdGuardSettingsStorage[]>(
       ExtensionStorageEnum.pi_hole_settings
     )
   }

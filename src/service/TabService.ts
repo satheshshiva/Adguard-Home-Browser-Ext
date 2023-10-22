@@ -1,4 +1,4 @@
-import { PiHoleSettingsStorage, StorageService } from './StorageService'
+import { AdGuardSettingsStorage, StorageService } from './StorageService'
 import Tab = chrome.tabs.Tab
 
 export default class TabService {
@@ -27,7 +27,7 @@ export default class TabService {
     const piHoleUrls = await StorageService.getPiHoleSettingsArray()
     const piHoleUrlsArray: Array<string> = []
     if (typeof piHoleUrls !== 'undefined') {
-      piHoleUrls.forEach((value: PiHoleSettingsStorage) => {
+      piHoleUrls.forEach((value: AdGuardSettingsStorage) => {
         if (value.adguard_uri_base) {
           piHoleUrlsArray.push(new URL(value.adguard_uri_base).hostname)
         }
