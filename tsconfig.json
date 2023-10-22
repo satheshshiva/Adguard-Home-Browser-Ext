@@ -1,0 +1,31 @@
+{
+	"compilerOptions": {
+		"target": "ES2018",
+		"sourceMap": false,
+		"lib": [
+			"dom",
+			"ESNext"
+		],
+		"rootDir": "src/",
+		"outDir": "dist",
+		"types": [
+			"chrome",
+			"firefox-webext-browser"
+		],
+		"baseUrl": ".",
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"esModuleInterop": true,
+		"experimentalDecorators": true,
+		"strict": true,
+		"allowSyntheticDefaultImports": true
+	},
+	"exclude": [
+		"node_modules",
+		"src/webpack",
+		".eslintrc.js"
+	],
+	"include": [
+		"src/**/*"
+	]
+}
