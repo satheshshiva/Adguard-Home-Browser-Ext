@@ -1,4 +1,4 @@
-import PiHoleApiStatusEnum from '../api/enum/PiHoleApiStatusEnum'
+import AdGuardApiStatusEnum from '../api/enum/AdGuardApiStatusEnum'
 
 export enum ExtensionBadgeTextEnum {
   enabled = 'On',
@@ -44,13 +44,13 @@ export class BadgeService {
    */
   public static compareBadgeTextToApiStatusEnum(
     badge_text: ExtensionBadgeTextEnum,
-    api_status: PiHoleApiStatusEnum
+    api_status: AdGuardApiStatusEnum
   ): boolean {
     switch (badge_text) {
       case ExtensionBadgeTextEnum.disabled:
-        return api_status === PiHoleApiStatusEnum.disabled
+        return api_status === AdGuardApiStatusEnum.disabled
       case ExtensionBadgeTextEnum.enabled:
-        return api_status === PiHoleApiStatusEnum.enabled
+        return api_status === AdGuardApiStatusEnum.enabled
       default:
         return false
     }

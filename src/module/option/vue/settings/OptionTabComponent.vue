@@ -110,8 +110,8 @@ import {
   AdGuardSettingsStorage,
   StorageService
 } from '../../../../service/StorageService'
-import { PiHoleVersions } from '../../../../api/models/PiHoleVersions'
-import PiHoleApiService from '../../../../service/PiHoleApiService'
+import { AdGuardVersions } from '../../../../api/models/AdGuardVersions'
+import AdGuardApiService from '../../../../service/AdGuardApiService'
 import useTranslation from '../../../../hooks/translation'
 
 enum ConnectionCheckStatus {
@@ -144,13 +144,13 @@ export default defineComponent({
       ConnectionCheckStatus.IDLE
     )
 
-    const connectionCheckData = ref<PiHoleVersions | null>(null)
+    const connectionCheckData = ref<AdGuardVersions | null>(null)
 
     const currentSelectedSettings = computed(() => tabs.value[currentTab.value])
 
     const connectionCheck = () => {
       connectionCheckStatus.value = ConnectionCheckStatus.IDLE
-      PiHoleApiService.getPiHoleVersion(currentSelectedSettings.value)
+      AdGuardApiService.getAdGuardVersion(currentSelectedSettings.value)
         .then(result => {
           if (typeof result.data === 'object') {
             connectionCheckStatus.value = ConnectionCheckStatus.OK
@@ -172,7 +172,7 @@ export default defineComponent({
     }
 
     const updateTabsSettings = async () => {
-      const results = await StorageService.getPiHoleSettingsArray()
+      const results = await StorageService.getAdGuardSettingsArray()
       if (typeof results !== 'undefined' && results.length > 0) {
         tabs.value = results
       }
@@ -209,7 +209,7 @@ export default defineComponent({
             piHoleSetting.password = ''
           }
         }
-        StorageService.savePiHoleSettingsArray(tabs.value)
+        StorageService.saveAdGuardSettingsArray(tabs.value)
       },
       { deep: true }
     )

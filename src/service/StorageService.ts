@@ -6,11 +6,11 @@ export interface AdGuardSettingsStorage {
 
 export enum AdGuardSettingsDefaults {
   adguard_uri_base = 'http://adguard/',
-  default_disable_time = 10
+  default_disable_time = 10000
 }
 
 export interface ExtensionStorage {
-  pi_hole_settings?: AdGuardSettingsStorage[]
+  adguard_settings?: AdGuardSettingsStorage[]
   default_disable_time?: number
   reload_after_disable?: boolean
   reload_after_white_list?: boolean
@@ -21,7 +21,7 @@ export interface ExtensionStorage {
 }
 
 export enum ExtensionStorageEnum {
-  pi_hole_settings = 'pi_hole_settings',
+  adguard_settings = 'adguard_settings',
   default_disable_time = 'default_disable_time',
   reload_after_disable = 'reload_after_disable',
   reload_after_white_list = 'reload_after_white_list',
@@ -31,7 +31,7 @@ export enum ExtensionStorageEnum {
 }
 
 export class StorageService {
-  public static savePiHoleSettingsArray(
+  public static saveAdGuardSettingsArray(
     settings: AdGuardSettingsStorage[]
   ): void {
     if (settings.length > 0) {
@@ -40,7 +40,7 @@ export class StorageService {
       )
 
       if (filteredSettings.length < 1) {
-        chrome.storage.local.remove(ExtensionStorageEnum.pi_hole_settings)
+        chrome.storage.local.remove(ExtensionStorageEnum.adguard_settings)
         return
       }
 
@@ -58,7 +58,7 @@ export class StorageService {
       }
 
       const storage: ExtensionStorage = {
-        pi_hole_settings: secureSettings
+        adguard_settings: secureSettings
       }
 
       chrome.storage.local.set(storage)
@@ -107,11 +107,11 @@ export class StorageService {
     )
   }
 
-  public static getPiHoleSettingsArray(): Promise<
+  public static getAdGuardSettingsArray(): Promise<
     AdGuardSettingsStorage[] | undefined
   > {
     return this.getStorageValue<AdGuardSettingsStorage[]>(
-      ExtensionStorageEnum.pi_hole_settings
+      ExtensionStorageEnum.adguard_settings
     )
   }
 

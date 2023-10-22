@@ -1,49 +1,49 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
-import { PiHoleApiStatus } from '../api/models/PiHoleApiStatus'
+import { AdGuardApiStatus } from '../api/models/AdGuardApiStatus'
 import { AdGuardSettingsStorage, StorageService } from './StorageService'
-import { PiHoleListStatus } from '../api/models/PiHoleListStatus'
-import { PiHoleVersions } from '../api/models/PiHoleVersions'
+import { AdGuardListStatus } from '../api/models/AdGuardListStatus'
+import { AdGuardVersions } from '../api/models/AdGuardVersions'
 import ApiListMode from '../api/enum/ApiListMode'
 import ApiList from '../api/enum/ApiList'
-import PiHoleApiStatusEnum from '../api/enum/PiHoleApiStatusEnum'
+import AdGuardApiStatusEnum from '../api/enum/AdGuardApiStatusEnum'
 
 const statusEndpoint="control/status"
 
-export default class PiHoleApiService {
-  public static async getPiHoleStatusCombined(): Promise<PiHoleApiStatusEnum> {
-    return new Promise<PiHoleApiStatusEnum>(resolve => {
+export default class AdGuardApiService {
+  public static async getAdGuardStatusCombined(): Promise<AdGuardApiStatusEnum> {
+    return new Promise<AdGuardApiStatusEnum>(resolve => {
       console.log("getPiHoleStatusCombined()")
-      this.getPiHoleStatus()
+      this.getAdGuardStatus()
         .then(results => {
           for (const result of results) {
             const resultData = result.data
             // If any PiHole is offline or has an error we use its status
             if (
-              resultData.status === PiHoleApiStatusEnum.error ||
-              resultData.status === PiHoleApiStatusEnum.disabled
+              resultData.status === AdGuardApiStatusEnum.error ||
+              resultData.status === AdGuardApiStatusEnum.disabled
             ) {
               resolve(resultData.status)
             }
           }
-          resolve(PiHoleApiStatusEnum.enabled)
+          resolve(AdGuardApiStatusEnum.enabled)
         })
         .catch(reason => {
           console.warn(reason)
-          resolve(PiHoleApiStatusEnum.error)
+          resolve(AdGuardApiStatusEnum.error)
         })
     })
   }
 
-  public static async getPiHoleStatus(): Promise<
-    AxiosResponse<PiHoleApiStatus>[]
+  public static async getAdGuardStatus(): Promise<
+    AxiosResponse<AdGuardApiStatus>[]
   > {
     console.log("getPiHoleStatus()")
-    const piHoleSettingsArray = await StorageService.getPiHoleSettingsArray()
+    const piHoleSettingsArray = await StorageService.getAdGuardSettingsArray()
     if (typeof piHoleSettingsArray === 'undefined') {
       return Promise.reject('PiHoleSettings empty')
     }
 
-    const promiseArray = new Array<Promise<AxiosResponse<PiHoleApiStatus>>>()
+    const promiseArray = new Array<Promise<AxiosResponse<AdGuardApiStatus>>>()
 
     for (const piHole of piHoleSettingsArray) {
       if (
@@ -54,36 +54,36 @@ export default class PiHoleApiService {
         return Promise.reject('Some PiHoleSettings are undefined.')
       }
 
-      const url = this.getPiHoleBaseUrl(piHole.adguard_uri_base, statusEndpoint)
+      const url = this.getAdGuardBaseUrl(piHole.adguard_uri_base, statusEndpoint)
 
       promiseArray.push(
-        axios.get<PiHoleApiStatus>(url.href, this.getAxiosConfig(piHole.username, piHole.password))
+        axios.get<AdGuardApiStatus>(url.href, this.getAxiosConfig(piHole.username, piHole.password))
       )
     }
 
     return Promise.all(promiseArray)
   }
 
-  public static async getPiHoleVersions(): Promise<
-    AxiosResponse<PiHoleVersions>[]
+  public static async getAdGuardVersions(): Promise<
+    AxiosResponse<AdGuardVersions>[]
   > {
     console.log("getPiHoleVersions()")
-    const piHoleSettingsArray = await StorageService.getPiHoleSettingsArray()
+    const piHoleSettingsArray = await StorageService.getAdGuardSettingsArray()
     if (typeof piHoleSettingsArray === 'undefined') {
       return Promise.reject('PiHoleSettings empty')
     }
-    const promiseArray = new Array<Promise<AxiosResponse<PiHoleVersions>>>()
+    const promiseArray = new Array<Promise<AxiosResponse<AdGuardVersions>>>()
 
     for (const instance of piHoleSettingsArray) {
-      promiseArray.push(this.getPiHoleVersion(instance))
+      promiseArray.push(this.getAdGuardVersion(instance))
     }
 
     return Promise.all(promiseArray)
   }
 
-  public static async getPiHoleVersion(
+  public static async getAdGuardVersion(
     piHole: AdGuardSettingsStorage
-  ): Promise<AxiosResponse<PiHoleVersions>> {
+  ): Promise<AxiosResponse<AdGuardVersions>> {
     console.log("getPiHoleVersion()")
     if (
       typeof piHole.adguard_uri_base === 'undefined' ||
@@ -92,16 +92,16 @@ export default class PiHoleApiService {
     ) {
       return Promise.reject('Some PiHoleSettings are undefined.')
     }
-    const url = this.getPiHoleBaseUrl(piHole.adguard_uri_base, statusEndpoint)
+    const url = this.getAdGuardBaseUrl(piHole.adguard_uri_base, statusEndpoint)
 
-    return axios.get<PiHoleVersions>(url.href, this.getAxiosConfig(piHole.username, piHole.password))
+    return axios.get<AdGuardVersions>(url.href, this.getAxiosConfig(piHole.username, piHole.password))
   }
 
-  public static async changePiHoleStatus(
-    mode: PiHoleApiStatusEnum,
+  public static async changeAdGuardStatus(
+    mode: AdGuardApiStatusEnum,
     time: number
-  ): Promise<AxiosResponse<PiHoleApiStatus>[]> {
-    const piHoleSettingsArray = await StorageService.getPiHoleSettingsArray()
+  ): Promise<AxiosResponse<AdGuardApiStatus>[]> {
+    const piHoleSettingsArray = await StorageService.getAdGuardSettingsArray()
     if (typeof piHoleSettingsArray === 'undefined') {
       return Promise.reject('PiHoleSettings empty')
     }
@@ -110,7 +110,7 @@ export default class PiHoleApiService {
       return Promise.reject(`Disable time smaller than allowed:${time}`)
     }
 
-    const promiseArray = new Array<Promise<AxiosResponse<PiHoleApiStatus>>>()
+    const promiseArray = new Array<Promise<AxiosResponse<AdGuardApiStatus>>>()
 
     for (const piHole of piHoleSettingsArray) {
       if (
@@ -121,11 +121,11 @@ export default class PiHoleApiService {
         return Promise.reject('Some PiHoleSettings are undefined.')
       }
 
-      const url = this.getPiHoleBaseUrl(piHole.adguard_uri_base, "control/protection")
+      const url = this.getAdGuardBaseUrl(piHole.adguard_uri_base, "control/protection")
       let data
-      if (mode === PiHoleApiStatusEnum.disabled) {
+      if (mode === AdGuardApiStatusEnum.disabled) {
         data = {enabled: false}
-      } else if (mode === PiHoleApiStatusEnum.enabled) {
+      } else if (mode === AdGuardApiStatusEnum.enabled) {
         data = {enabled: true,
                 duration: time}
       } else {
@@ -133,7 +133,7 @@ export default class PiHoleApiService {
       }
 
       promiseArray.push(
-        axios.post<PiHoleApiStatus>(url.href, data, this.getAxiosConfig(piHole.username, piHole.password))
+        axios.post<AdGuardApiStatus>(url.href, data, this.getAxiosConfig(piHole.username, piHole.password))
       )
     }
 
@@ -143,14 +143,14 @@ export default class PiHoleApiService {
   public static async addDomainToList(
     list: ApiList,
     domain: string
-  ): Promise<AxiosResponse<PiHoleListStatus>[]> {
+  ): Promise<AxiosResponse<AdGuardListStatus>[]> {
     return this.changeDomainOnList(list, ApiListMode.add, domain)
   }
 
   public static async subDomainFromList(
     list: ApiList,
     domain: string
-  ): Promise<AxiosResponse<PiHoleListStatus>[]> {
+  ): Promise<AxiosResponse<AdGuardListStatus>[]> {
     return this.changeDomainOnList(list, ApiListMode.sub, domain)
   }
 
@@ -158,8 +158,8 @@ export default class PiHoleApiService {
     list: ApiList,
     mode: ApiListMode,
     domain: string
-  ): Promise<AxiosResponse<PiHoleListStatus>[]> {
-    const piHoleSettingsArray = await StorageService.getPiHoleSettingsArray()
+  ): Promise<AxiosResponse<AdGuardListStatus>[]> {
+    const piHoleSettingsArray = await StorageService.getAdGuardSettingsArray()
 
     if (typeof piHoleSettingsArray === 'undefined') {
       return Promise.reject('PiHoleSettings empty')
@@ -169,7 +169,7 @@ export default class PiHoleApiService {
       return Promise.reject("Domain can't be empty")
     }
 
-    const promiseArray = new Array<Promise<AxiosResponse<PiHoleListStatus>>>()
+    const promiseArray = new Array<Promise<AxiosResponse<AdGuardListStatus>>>()
 
     for (const piHole of piHoleSettingsArray) {
       if (
@@ -179,11 +179,11 @@ export default class PiHoleApiService {
       ) {
         return Promise.reject('Some PiHoleSettings are undefined.')
       }
-      const url = this.getPiHoleBaseUrl(piHole.adguard_uri_base, piHole.password)
+      const url = this.getAdGuardBaseUrl(piHole.adguard_uri_base, piHole.password)
       url.searchParams.append('list', list)
       url.searchParams.append(mode, domain)
       promiseArray.push(
-        axios.get<PiHoleListStatus>(url.href, this.getAxiosConfig(piHole.username, piHole.password))
+        axios.get<AdGuardListStatus>(url.href, this.getAxiosConfig(piHole.username, piHole.password))
       )
     }
 
@@ -204,7 +204,7 @@ export default class PiHoleApiService {
     }
   }
 
-  private static getPiHoleBaseUrl(domain: string, endpoint?: string): URL {
+  private static getAdGuardBaseUrl(domain: string, endpoint?: string): URL {
     let domainPrepared = domain
     if (domain.slice(-1) !== '/') {
       domainPrepared += '/'

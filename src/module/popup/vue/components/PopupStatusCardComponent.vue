@@ -45,14 +45,14 @@ import {
   AdGuardSettingsDefaults,
   StorageService
 } from '../../../../service/StorageService'
-import { PiHoleApiStatus } from '../../../../api/models/PiHoleApiStatus'
+import { AdGuardApiStatus } from '../../../../api/models/AdGuardApiStatus'
 import {
   BadgeService,
   ExtensionBadgeTextEnum
 } from '../../../../service/BadgeService'
 import TabService from '../../../../service/TabService'
-import PiHoleApiService from '../../../../service/PiHoleApiService'
-import PiHoleApiStatusEnum from '../../../../api/enum/PiHoleApiStatusEnum'
+import AdGuardApiService from '../../../../service/AdGuardApiService'
+import AdGuardApiStatusEnum from '../../../../api/enum/AdGuardApiStatusEnum'
 import useTranslation from '../../../../hooks/translation'
 
 export default defineComponent({
@@ -88,14 +88,14 @@ export default defineComponent({
       })
     }
 
-    const updateComponentsByData = (data: PiHoleApiStatus) => {
-      if (data.status === PiHoleApiStatusEnum.disabled) {
+    const updateComponentsByData = (data: AdGuardApiStatus) => {
+      if (data.status === AdGuardApiStatusEnum.disabled) {
         defaultDisableTimeDisabled.value = true
         sliderChecked.value = false
         sliderDisabled.value = false
         BadgeService.setBadgeText(ExtensionBadgeTextEnum.disabled)
         emit('updateStatus', false)
-      } else if (data.status === PiHoleApiStatusEnum.enabled) {
+      } else if (data.status === AdGuardApiStatusEnum.enabled) {
         defaultDisableTimeDisabled.value = false
         sliderDisabled.value = false
         sliderChecked.value = true
@@ -120,18 +120,18 @@ export default defineComponent({
         defaultDisableTimeDisabled.value = false
       }
 
-      PiHoleApiService.getPiHoleStatusCombined()
+      AdGuardApiService.getAdGuardStatusCombined()
         .then(value => {
           updateComponentsByData({ status: value })
         })
         .catch(() =>
-          updateComponentsByData({ status: PiHoleApiStatusEnum.error })
+          updateComponentsByData({ status: AdGuardApiStatusEnum.error })
         )
     }
 
-    const onSliderClickSuccessHandler = (data: PiHoleApiStatus) => {
+    const onSliderClickSuccessHandler = (data: AdGuardApiStatus) => {
       updateComponentsByData(data)
-      if (data.status === PiHoleApiStatusEnum.disabled) {
+      if (data.status === AdGuardApiStatusEnum.disabled) {
         const reloadAfterDisableCallback = (
           is_enabled: boolean | undefined
         ) => {
@@ -149,14 +149,14 @@ export default defineComponent({
     ) => {
       console.warn(error_message)
 
-      updateComponentsByData({ status: PiHoleApiStatusEnum.error })
+      updateComponentsByData({ status: AdGuardApiStatusEnum.error })
       if (refresh_status) {
         setTimeout(() => {
-          PiHoleApiService.getPiHoleStatusCombined()
+          AdGuardApiService.getAdGuardStatusCombined()
             .then(data => updateComponentsByData({ status: data }))
             .catch(() =>
               updateComponentsByData({
-                status: PiHoleApiStatusEnum.error
+                status: AdGuardApiStatusEnum.error
               })
             )
         }, 1500)
@@ -170,17 +170,17 @@ export default defineComponent({
 
     const sliderClicked = () => {
       const currentMode = sliderChecked.value
-        ? PiHoleApiStatusEnum.enabled
-        : PiHoleApiStatusEnum.disabled
+        ? AdGuardApiStatusEnum.enabled
+        : AdGuardApiStatusEnum.disabled
 
       const time: number = defaultDisableTime.value
 
       if (time >= 0) {
-        PiHoleApiService.changePiHoleStatus(currentMode, time)
+        AdGuardApiService.changeAdGuardStatus(currentMode, time)
           .then(value => {
             for (const piHoleStatus of value) {
               if (
-                piHoleStatus.data.status === PiHoleApiStatusEnum.error ||
+                piHoleStatus.data.status === AdGuardApiStatusEnum.error ||
                 piHoleStatus.data.status !== currentMode
               ) {
                 throwConsoleBadgeError(

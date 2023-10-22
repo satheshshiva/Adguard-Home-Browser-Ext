@@ -1,7 +1,7 @@
-enum PiHoleApiStatusEnum {
+enum AdGuardApiStatusEnum {
   enabled = 'enabled',
   disabled = 'disabled',
   error = 'error'
 }
 
-export default PiHoleApiStatusEnum
+export default AdGuardApiStatusEnum

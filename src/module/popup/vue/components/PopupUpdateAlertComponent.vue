@@ -7,7 +7,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from '@vue/composition-api'
 import { StorageService } from '../../../../service/StorageService'
-import PiHoleApiService from '../../../../service/PiHoleApiService'
+import AdGuardApiService from '../../../../service/AdGuardApiService'
 import useTranslation from '../../../../hooks/translation'
 
 export default defineComponent({
@@ -26,7 +26,7 @@ export default defineComponent({
       }
 
       updatesAvailable.value =
-        (await PiHoleApiService.getPiHoleVersions()).filter(
+        (await AdGuardApiService.getAdGuardVersions()).filter(
           ({ data }) => data.version
         ).length > 0
     }

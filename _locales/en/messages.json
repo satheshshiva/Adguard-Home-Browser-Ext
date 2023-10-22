@@ -68,7 +68,7 @@
 		"message": "AdGuard Home Address"
 	},
 	"options_add_button": {
-		"message": "Add AdGuard Home"
+		"message": "Add Another Instance"
 	},
 	"options_remove_button": {
 		"message": "Remove AdGuard Home $num$",

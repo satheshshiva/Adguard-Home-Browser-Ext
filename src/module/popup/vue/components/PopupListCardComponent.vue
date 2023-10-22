@@ -38,7 +38,7 @@
 <script lang="ts">
 import { mdiAlphaXCircleOutline, mdiCheckCircleOutline } from '@mdi/js'
 import { defineComponent, ref } from '@vue/composition-api'
-import PiHoleApiService from '../../../../service/PiHoleApiService'
+import AdGuardApiService from '../../../../service/AdGuardApiService'
 import ApiList from '../../../../api/enum/ApiList'
 import useTranslation from '../../../../hooks/translation'
 
@@ -69,12 +69,12 @@ export default defineComponent({
       }
 
       // We remove the domain from the opposite list
-      await PiHoleApiService.subDomainFromList(
+      await AdGuardApiService.subDomainFromList(
         mode === ApiList.whitelist ? ApiList.blacklist : ApiList.whitelist,
         currentUrl
       )
 
-      await PiHoleApiService.addDomainToList(mode, currentUrl)
+      await AdGuardApiService.addDomainToList(mode, currentUrl)
 
       setTimeout(() => {
         whitelistingActive.value = false

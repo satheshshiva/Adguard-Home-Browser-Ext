@@ -5,8 +5,8 @@ import {
 import ContextMenuInitializer from './ContextMenuInitializer'
 import ChromeRuntimeInitializer from './ChromeRuntimeInitializer'
 import { Initializer } from '../../general/Initializer'
-import PiHoleApiService from '../../../service/PiHoleApiService'
-import PiHoleApiStatusEnum from '../../../api/enum/PiHoleApiStatusEnum'
+import AdGuardApiService from '../../../service/AdGuardApiService'
+import AdGuardApiStatusEnum from '../../../api/enum/AdGuardApiStatusEnum'
 import HotKeyInitializer from './HotKeyInitializer'
 
 export default class BackgroundInitializer implements Initializer {
@@ -27,12 +27,12 @@ export default class BackgroundInitializer implements Initializer {
    * Checking the current status of the PiHole(s)
    */
   private async checkStatus(): Promise<void> {
-    PiHoleApiService.getPiHoleStatusCombined().then(value => {
+    AdGuardApiService.getAdGuardStatusCombined().then(value => {
       BadgeService.getBadgeText().then(result => {
         if (!BadgeService.compareBadgeTextToApiStatusEnum(result, value)) {
-          if (value === PiHoleApiStatusEnum.disabled) {
+          if (value === AdGuardApiStatusEnum.disabled) {
             BadgeService.setBadgeText(ExtensionBadgeTextEnum.disabled)
-          } else if (value === PiHoleApiStatusEnum.enabled) {
+          } else if (value === AdGuardApiStatusEnum.enabled) {
             BadgeService.setBadgeText(ExtensionBadgeTextEnum.enabled)
           }
         }

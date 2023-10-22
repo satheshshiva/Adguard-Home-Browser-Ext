@@ -1,18 +1,18 @@
-import PiHoleApiStatusEnum from '../api/enum/PiHoleApiStatusEnum'
+import AdGuardApiStatusEnum from '../api/enum/AdGuardApiStatusEnum'
 import { BadgeService, ExtensionBadgeTextEnum } from './BadgeService'
 import { AdGuardSettingsDefaults, StorageService } from './StorageService'
-import PiHoleApiService from './PiHoleApiService'
+import AdGuardApiService from './AdGuardApiService'
 import TabService from './TabService'
 import ApiList from '../api/enum/ApiList'
 
 export default class BackgroundService {
   public static togglePiHole(): void {
-    let newStatus: PiHoleApiStatusEnum
+    let newStatus: AdGuardApiStatusEnum
     BadgeService.getBadgeText().then(result => {
       if (result === ExtensionBadgeTextEnum.disabled) {
-        newStatus = PiHoleApiStatusEnum.enabled
+        newStatus = AdGuardApiStatusEnum.enabled
       } else if (result === ExtensionBadgeTextEnum.enabled) {
-        newStatus = PiHoleApiStatusEnum.disabled
+        newStatus = AdGuardApiStatusEnum.disabled
       } else {
         return
       }
@@ -23,11 +23,11 @@ export default class BackgroundService {
           disableTime = AdGuardSettingsDefaults.default_disable_time
         }
 
-        PiHoleApiService.changePiHoleStatus(newStatus, disableTime)
+        AdGuardApiService.changeAdGuardStatus(newStatus, disableTime)
           .then(data => {
             for (const piHoleStatus of data) {
               if (
-                piHoleStatus.data.status === PiHoleApiStatusEnum.error ||
+                piHoleStatus.data.status === AdGuardApiStatusEnum.error ||
                 piHoleStatus.data.status !== newStatus
               ) {
                 console.warn(
@@ -38,7 +38,7 @@ export default class BackgroundService {
               }
             }
             BadgeService.setBadgeText(
-              newStatus === PiHoleApiStatusEnum.disabled
+              newStatus === AdGuardApiStatusEnum.disabled
                 ? ExtensionBadgeTextEnum.disabled
                 : ExtensionBadgeTextEnum.enabled
             )
@@ -62,9 +62,9 @@ export default class BackgroundService {
       if (url.length < 1) {
         return
       }
-      PiHoleApiService.subDomainFromList(ApiList.whitelist, url)
+      AdGuardApiService.subDomainFromList(ApiList.whitelist, url)
         .then(() => {
-          PiHoleApiService.addDomainToList(ApiList.blacklist, url)
+          AdGuardApiService.addDomainToList(ApiList.blacklist, url)
             .then(() => {
               BadgeService.setBadgeText(ExtensionBadgeTextEnum.ok)
             })
@@ -85,9 +85,9 @@ export default class BackgroundService {
       if (url.length < 1) {
         return
       }
-      PiHoleApiService.subDomainFromList(ApiList.blacklist, url)
+      AdGuardApiService.subDomainFromList(ApiList.blacklist, url)
         .then(() => {
-          PiHoleApiService.addDomainToList(ApiList.whitelist, url)
+          AdGuardApiService.addDomainToList(ApiList.whitelist, url)
             .then(value => {
               StorageService.getReloadAfterWhitelist().then(state => {
                 if (typeof state === 'undefined') {

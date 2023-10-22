@@ -24,7 +24,7 @@ export default class TabService {
     // Domains that should not be listed anyway.
     let excludesDomains: Array<string> = ['localhost', '127.0.0.1', 'pi.hole']
 
-    const piHoleUrls = await StorageService.getPiHoleSettingsArray()
+    const piHoleUrls = await StorageService.getAdGuardSettingsArray()
     const piHoleUrlsArray: Array<string> = []
     if (typeof piHoleUrls !== 'undefined') {
       piHoleUrls.forEach((value: AdGuardSettingsStorage) => {
