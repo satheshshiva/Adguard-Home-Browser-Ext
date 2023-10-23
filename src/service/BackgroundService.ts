@@ -25,14 +25,9 @@ export default class BackgroundService {
 
         AdGuardApiService.changeAdGuardStatus(newStatus, disableTime)
           .then(data => {
-            for (const piHoleStatus of data) {
-              if (
-                piHoleStatus.data.status === AdGuardApiStatusEnum.error ||
-                piHoleStatus.data.status !== newStatus
-              ) {
-                console.warn(
-                  'One PiHole returned Error from its request. Please check the API Key.'
-                )
+            for (const changeStatusResponse of data) {
+              if (changeStatusResponse.data !== "OK") {
+                console.warn(`One AdGuard instance returned Error from its request. Error: ${changeStatusResponse.data}`)
                 BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
                 return
               }

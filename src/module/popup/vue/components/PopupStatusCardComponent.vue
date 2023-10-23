@@ -45,7 +45,6 @@ import {
   AdGuardSettingsDefaults,
   StorageService
 } from '../../../../service/StorageService'
-import { AdGuardApiStatus } from '../../../../api/models/AdGuardApiStatus'
 import {
   BadgeService,
   ExtensionBadgeTextEnum
@@ -88,14 +87,14 @@ export default defineComponent({
       })
     }
 
-    const updateComponentsByData = (data: AdGuardApiStatus) => {
-      if (data.status === AdGuardApiStatusEnum.disabled) {
+    const updateComponentsByData = (currentStatus: AdGuardApiStatusEnum) => {
+      if (currentStatus === AdGuardApiStatusEnum.disabled) {
         defaultDisableTimeDisabled.value = true
         sliderChecked.value = false
         sliderDisabled.value = false
         BadgeService.setBadgeText(ExtensionBadgeTextEnum.disabled)
         emit('updateStatus', false)
-      } else if (data.status === AdGuardApiStatusEnum.enabled) {
+      } else if (currentStatus === AdGuardApiStatusEnum.enabled) {
         defaultDisableTimeDisabled.value = false
         sliderDisabled.value = false
         sliderChecked.value = true
@@ -122,25 +121,29 @@ export default defineComponent({
 
       AdGuardApiService.getAdGuardStatusCombined()
         .then(value => {
-          updateComponentsByData({ status: value })
+          updateComponentsByData(value)
         })
         .catch(() =>
-          updateComponentsByData({ status: AdGuardApiStatusEnum.error })
+          updateComponentsByData(AdGuardApiStatusEnum.error )
         )
     }
 
-    const onSliderClickSuccessHandler = (data: AdGuardApiStatus) => {
-      updateComponentsByData(data)
-      if (data.status === AdGuardApiStatusEnum.disabled) {
-        const reloadAfterDisableCallback = (
-          is_enabled: boolean | undefined
-        ) => {
-          if (typeof is_enabled !== 'undefined' && is_enabled) {
-            TabService.reloadCurrentTab(1000)
+    const onSliderClickSuccessHandler = () => {
+      AdGuardApiService.getAdGuardStatusCombined().then(data => {
+        updateComponentsByData(data)
+        if (data === AdGuardApiStatusEnum.disabled) {
+          const reloadAfterDisableCallback = (
+            is_enabled: boolean | undefined
+          ) => {
+            if (typeof is_enabled !== 'undefined' && is_enabled) {
+              TabService.reloadCurrentTab(1000)
+            }
           }
+          StorageService.getReloadAfterDisable().then(reloadAfterDisableCallback)
         }
-        StorageService.getReloadAfterDisable().then(reloadAfterDisableCallback)
-      }
+      }).catch(() =>
+        updateComponentsByData(AdGuardApiStatusEnum.error )
+      )
     }
 
     const throwConsoleBadgeError = (
@@ -149,15 +152,13 @@ export default defineComponent({
     ) => {
       console.warn(error_message)
 
-      updateComponentsByData({ status: AdGuardApiStatusEnum.error })
+      updateComponentsByData(AdGuardApiStatusEnum.error )
       if (refresh_status) {
         setTimeout(() => {
           AdGuardApiService.getAdGuardStatusCombined()
-            .then(data => updateComponentsByData({ status: data }))
+            .then(data => updateComponentsByData(data ))
             .catch(() =>
-              updateComponentsByData({
-                status: AdGuardApiStatusEnum.error
-              })
+              updateComponentsByData(AdGuardApiStatusEnum.error)
             )
         }, 1500)
       }
@@ -180,17 +181,16 @@ export default defineComponent({
           .then(value => {
             for (const piHoleStatus of value) {
               if (
-                piHoleStatus.data.status === AdGuardApiStatusEnum.error ||
-                piHoleStatus.data.status !== currentMode
+                piHoleStatus.data !== "OK"
               ) {
                 throwConsoleBadgeError(
-                  'One PiHole returned Error from its request. Please check the API Key.',
+                  'Atleast one AdGuard instance(s) returned error from its request. Please check the credentials.',
                   true
                 )
                 return
               }
             }
-            onSliderClickSuccessHandler(value[0].data)
+            onSliderClickSuccessHandler()
           })
           .catch(reason => {
             throwConsoleBadgeError(reason)

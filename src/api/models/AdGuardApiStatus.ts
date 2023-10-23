@@ -1,5 +1,6 @@
 import AdGuardApiStatusEnum from '../enum/AdGuardApiStatusEnum'
 
 export interface AdGuardApiStatus {
-  status: AdGuardApiStatusEnum
+  protection_enabled: boolean
+  running: boolean
 }

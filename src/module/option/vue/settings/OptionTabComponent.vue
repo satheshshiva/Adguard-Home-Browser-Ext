@@ -80,9 +80,7 @@
           v-if="
             connectionCheckStatus === 'OK' &&
               connectionCheckData !== null &&
-              (connectionCheckData.core_update ||
-                connectionCheckData.web_update ||
-                connectionCheckData.FTL_update)
+              (connectionCheckData.version)
           "
           outlined
           type="info"
@@ -110,7 +108,7 @@ import {
   AdGuardSettingsStorage,
   StorageService
 } from '../../../../service/StorageService'
-import { AdGuardVersions } from '../../../../api/models/AdGuardVersions'
+import { AdGuardVersion } from '../../../../api/models/AdGuardVersion'
 import AdGuardApiService from '../../../../service/AdGuardApiService'
 import useTranslation from '../../../../hooks/translation'
 
@@ -144,7 +142,7 @@ export default defineComponent({
       ConnectionCheckStatus.IDLE
     )
 
-    const connectionCheckData = ref<AdGuardVersions | null>(null)
+    const connectionCheckData = ref<AdGuardVersion | null>(null)
 
     const currentSelectedSettings = computed(() => tabs.value[currentTab.value])
 
@@ -189,24 +187,24 @@ export default defineComponent({
     watch(
       tabs,
       () => {
-        for (const piHoleSetting of tabs.value) {
-          if (typeof piHoleSetting.adguard_uri_base !== 'undefined') {
-            piHoleSetting.adguard_uri_base = piHoleSetting.adguard_uri_base.replace(
+        for (const adGuardSetting of tabs.value) {
+          if (typeof adGuardSetting.adguard_uri_base !== 'undefined') {
+            adGuardSetting.adguard_uri_base = adGuardSetting.adguard_uri_base.replace(
               /\s+/g,
               ''
             )
           } else {
-            piHoleSetting.adguard_uri_base = ''
+            adGuardSetting.adguard_uri_base = ''
           }
-          if (typeof piHoleSetting.username !== 'undefined') {
-            piHoleSetting.username = piHoleSetting.username.replace(/\s+/g, '')
+          if (typeof adGuardSetting.username !== 'undefined') {
+            adGuardSetting.username = adGuardSetting.username.replace(/\s+/g, '')
           } else {
-            piHoleSetting.username = ''
+            adGuardSetting.username = ''
           }
-          if (typeof piHoleSetting.password !== 'undefined') {
-            piHoleSetting.password = piHoleSetting.password.replace(/\s+/g, '')
+          if (typeof adGuardSetting.password !== 'undefined') {
+            adGuardSetting.password = adGuardSetting.password.replace(/\s+/g, '')
           } else {
-            piHoleSetting.password = ''
+            adGuardSetting.password = ''
           }
         }
         StorageService.saveAdGuardSettingsArray(tabs.value)
@@ -216,7 +214,7 @@ export default defineComponent({
 
     const connectionCheckVersionText = computed(() => {
       const data = connectionCheckData.value
-      return `Version: ${data?.version} Status: ${data?.running} Protection: ${data?.protection_enabled}`
+      return `Version: ${data?.version}`
     })
 
     const toggleApiKeyVisibility = () => {

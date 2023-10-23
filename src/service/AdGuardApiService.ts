@@ -2,12 +2,13 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { AdGuardApiStatus } from '../api/models/AdGuardApiStatus'
 import { AdGuardSettingsStorage, StorageService } from './StorageService'
 import { AdGuardListStatus } from '../api/models/AdGuardListStatus'
-import { AdGuardVersions } from '../api/models/AdGuardVersions'
+import { AdGuardVersion } from '../api/models/AdGuardVersion'
 import ApiListMode from '../api/enum/ApiListMode'
 import ApiList from '../api/enum/ApiList'
 import AdGuardApiStatusEnum from '../api/enum/AdGuardApiStatusEnum'
 
 const statusEndpoint="control/status"
+const changeStatusEndpoint="control/protection"
 
 export default class AdGuardApiService {
   public static async getAdGuardStatusCombined(): Promise<AdGuardApiStatusEnum> {
@@ -15,16 +16,12 @@ export default class AdGuardApiService {
       this.getAdGuardStatus()
         .then(results => {
           for (const result of results) {
-            const resultData = result.data
+            if(result.data.protection_enabled) {
             // If any AdGuard instance is offline or has an error we use its status
-            if (
-              resultData.status === AdGuardApiStatusEnum.error ||
-              resultData.status === AdGuardApiStatusEnum.disabled
-            ) {
-              resolve(resultData.status)
+              resolve(AdGuardApiStatusEnum.disabled)
             }
+            resolve(AdGuardApiStatusEnum.enabled)
           }
-          resolve(AdGuardApiStatusEnum.enabled)
         })
         .catch(reason => {
           console.warn(reason)
@@ -63,13 +60,13 @@ export default class AdGuardApiService {
   }
 
   public static async getAdGuardVersions(): Promise<
-    AxiosResponse<AdGuardVersions>[]
+    AxiosResponse<AdGuardVersion>[]
   > {
     const adGuardSettingsArray = await StorageService.getAdGuardSettingsArray()
     if (typeof adGuardSettingsArray === 'undefined') {
       return Promise.reject('AdGuardSettings empty')
     }
-    const promiseArray = new Array<Promise<AxiosResponse<AdGuardVersions>>>()
+    const promiseArray = new Array<Promise<AxiosResponse<AdGuardVersion>>>()
 
     for (const instance of adGuardSettingsArray) {
       promiseArray.push(this.getAdGuardVersion(instance))
@@ -80,7 +77,7 @@ export default class AdGuardApiService {
 
   public static async getAdGuardVersion(
     adGuard: AdGuardSettingsStorage
-  ): Promise<AxiosResponse<AdGuardVersions>> {
+  ): Promise<AxiosResponse<AdGuardVersion>> {
     if (
       typeof adGuard.adguard_uri_base === 'undefined' ||
       typeof adGuard.username === 'undefined' ||
@@ -90,13 +87,13 @@ export default class AdGuardApiService {
     }
     const url = this.getAdGuardBaseUrl(adGuard.adguard_uri_base, statusEndpoint)
 
-    return axios.get<AdGuardVersions>(url.href, this.getAxiosConfig(adGuard.username, adGuard.password))
+    return axios.get<AdGuardVersion>(url.href, this.getAxiosConfig(adGuard.username, adGuard.password))
   }
 
   public static async changeAdGuardStatus(
     mode: AdGuardApiStatusEnum,
     time: number
-  ): Promise<AxiosResponse<AdGuardApiStatus>[]> {
+  ): Promise<AxiosResponse<string>[]> {
     const adGuardSettingsArray = await StorageService.getAdGuardSettingsArray()
     if (typeof adGuardSettingsArray === 'undefined') {
       return Promise.reject('AdGuardSettings empty')
@@ -106,7 +103,7 @@ export default class AdGuardApiService {
       return Promise.reject(`Disable time smaller than allowed:${time}`)
     }
 
-    const promiseArray = new Array<Promise<AxiosResponse<AdGuardApiStatus>>>()
+    const promiseArray = new Array<Promise<AxiosResponse<string>>>()
 
     for (const adguard of adGuardSettingsArray) {
       if (
@@ -117,7 +114,7 @@ export default class AdGuardApiService {
         return Promise.reject('Some AdGuardSettings are undefined.')
       }
 
-      const url = this.getAdGuardBaseUrl(adguard.adguard_uri_base, "control/protection")
+      const url = this.getAdGuardBaseUrl(adguard.adguard_uri_base, changeStatusEndpoint)
       let data
       if (mode === AdGuardApiStatusEnum.disabled) {
         data = {enabled: false}
@@ -129,7 +126,7 @@ export default class AdGuardApiService {
       }
 
       promiseArray.push(
-        axios.post<AdGuardApiStatus>(url.href, data, this.getAxiosConfig(adguard.username, adguard.password))
+        axios.post<string>(url.href, data, this.getAxiosConfig(adguard.username, adguard.password))
       )
     }
 

@@ -24,7 +24,7 @@ export default class BackgroundInitializer implements Initializer {
   }
 
   /**
-   * Checking the current status of the PiHole(s)
+   * Checking the current status of the AdGuard instance(s)
    */
   private async checkStatus(): Promise<void> {
     AdGuardApiService.getAdGuardStatusCombined().then(value => {
