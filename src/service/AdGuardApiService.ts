@@ -19,7 +19,7 @@ export default class AdGuardApiService {
       this.getAdGuardStatus()
         .then(results => {
           for (const result of results) {
-            if(result.data.protection_enabled) {
+            if(!result.data.protection_enabled) {
             // If any AdGuard instance is offline or has an error we use its status
               resolve(AdGuardApiStatusEnum.disabled)
             }
@@ -112,6 +112,7 @@ export default class AdGuardApiService {
     mode: AdGuardApiStatusEnum,
     time: number
   ): Promise<AxiosResponse<string>[]> {
+
     const adGuardSettingsArray = await StorageService.getAdGuardSettingsArray()
     if (typeof adGuardSettingsArray === 'undefined') {
       return Promise.reject('AdGuardSettings empty')
@@ -135,13 +136,14 @@ export default class AdGuardApiService {
       const url = this.getAdGuardBaseUrl(adguard.adguard_uri_base, changeStatusEndpoint)
       let data
       if (mode === AdGuardApiStatusEnum.disabled) {
-        data = {enabled: false}
+        data = {enabled: false,
+          duration: +time}
       } else if (mode === AdGuardApiStatusEnum.enabled) {
-        data = {enabled: true,
-                duration: time}
+        data = {enabled: true}
       } else {
         return Promise.reject(`Mode ${mode} not allowed for this function.`)
       }
+
       promiseArray.push(
             axios.post(url.href, data, this.getAxiosConfigStr(adguard.username, adguard.password))
             )
@@ -202,7 +204,25 @@ export default class AdGuardApiService {
 
   private static getAxiosConfig(u:string, p:string): AxiosRequestConfig {
     return {
-      transformResponse: data => JSON.parse(data),
+      transformResponse: [
+        (data) => {
+          // console.log(`Server response: ${data}`)
+          let resp;
+          if(!data || data===""){
+            throw Error(`Empty response from server`);
+          }
+          try {
+            resp = JSON.parse(data);
+          } catch (error) {
+            if(data.trim()==="Forbidden"){
+              throw Error(`Forbidden: Please check the credentials.`)
+            }
+            throw Error(`[requestClient] Error parsingJSON data - ${JSON.stringify(error)}`
+            );
+          }
+          return resp
+        },
+      ],
       auth: {
         username: u,
         password: p
@@ -212,7 +232,19 @@ export default class AdGuardApiService {
 
   private static getAxiosConfigStr(u:string, p:string): AxiosRequestConfig {
     return {
-      transformResponse: data => data.trim(),
+      transformResponse: [
+        (data) => {
+          if(!data || data===""){
+            throw Error(`Empty response from server`);
+          }
+          if(data.trim()==="Forbidden"){
+            throw Error(`Forbidden: Please check the credentials.`)
+          }
+          console.log(`Server response: ${data}`)
+          return data?data.trim():data
+        }
+      ],
+
       auth: {
         username: u,
         password: p

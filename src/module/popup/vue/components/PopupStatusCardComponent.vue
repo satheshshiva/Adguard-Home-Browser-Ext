@@ -182,7 +182,7 @@ export default defineComponent({
             for (const adGuardStatus of value) {
               if (adGuardStatus.data !== "OK") {
                 throwConsoleBadgeError(
-                  `Change status failed in one or more adGuard instance(s): Error:${ adGuardStatus.data}:typof ${ typeof "OK"}comparison: ${adGuardStatus.data ==="OK"}`,
+                  `Change status failed in one or more adGuard instance(s): Error:${ adGuardStatus.data}`,
                   true )
                 return
               }
