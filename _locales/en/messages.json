@@ -1,6 +1,6 @@
 {
 	"manifest_description": {
-		"message": "Browser extension to control your AdGuard Home. Built with Vue and Typescript"
+		"message": "Browser extension to control your AdGuard Home. Built with Vue and Typescript."
 	},
 	"options_title": {
 		"message": "$page$ - AdGuard Home Browser Extension",
@@ -62,7 +62,7 @@
 		"message": "seconds"
 	},
 	"options_reload_after_disable": {
-		"message": "Reload current tab after stopping server"
+		"message": "Reload current tab after disabling protection"
 	},
 	"options_username": {
 		"message": "Username"
