@@ -240,7 +240,7 @@ export default class AdGuardApiService {
           if(data.trim()==="Forbidden"){
             throw Error(`Forbidden: Please check the credentials.`)
           }
-          console.log(`Server response: ${data}`)
+          // console.log(`Server response: ${data}`)
           return data?data.trim():data
         }
       ],
