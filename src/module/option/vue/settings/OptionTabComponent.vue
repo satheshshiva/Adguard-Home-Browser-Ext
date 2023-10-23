@@ -49,7 +49,7 @@
         ></v-text-field>
 
         <div class="mb-5">
-          <v-btn v-if="tabs.length < 4" @click.prevent="addNewPiHole"
+          <v-btn v-if="tabs.length < 4" @click.prevent="addNewInstance"
             >{{ translate(I18NOptionKeys.options_add_button) }}
           </v-btn>
           <v-btn

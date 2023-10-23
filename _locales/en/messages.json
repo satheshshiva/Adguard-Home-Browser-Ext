@@ -77,7 +77,7 @@
 		"message": "Add Another Instance"
 	},
 	"options_remove_button": {
-		"message": "Remove AdGuard Home $num$",
+		"message": "Remove Instance $num$",
 		"placeholders": {
 			"num": {
 				"content": "$1"
