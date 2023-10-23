@@ -78,24 +78,6 @@ export default defineComponent({
           StorageService.saveReloadAfterDisable(value)
       },
       {
-        labelTextKey: I18NOptionKeys.options_reload_after_white_list,
-        getterFunction: () => StorageService.getReloadAfterWhitelist(),
-        setterFunction: (value: boolean) =>
-          StorageService.saveReloadAfterWhitelist(value)
-      },
-      {
-        labelTextKey: I18NOptionKeys.option_disable_feature,
-        getterFunction: () => StorageService.getDisableListFeature(),
-        setterFunction: (value: boolean) =>
-          StorageService.saveDisableListFeature(value)
-      },
-      {
-        labelTextKey: I18NOptionKeys.option_disable_update_notification,
-        getterFunction: () => StorageService.getDisableUpdateNotification(),
-        setterFunction: (value: boolean) =>
-          StorageService.saveDisableUpdateNotification(value)
-      },
-      {
         labelTextKey: I18NOptionKeys.option_disable_context_menu,
         getterFunction: () => StorageService.getDisableContextMenu(),
         setterFunction: (value: boolean) => {

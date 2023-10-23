@@ -15,12 +15,6 @@ export default class HotKeyInitializer implements Initializer {
         case HotKeyEnum.hotkey_toggle_pihole:
           BackgroundService.togglePiHole()
           break
-        case HotKeyEnum.hotkey_blacklist_current_domain:
-          BackgroundService.blacklistCurrentDomain()
-          break
-        case HotKeyEnum.hotkey_whitelist_current_domain:
-          BackgroundService.whitelistCurrentDomain()
-          break
         case HotKeyEnum.hotkey_open_settings:
           BackgroundService.openOptions()
           break

@@ -3,7 +3,6 @@ import { BadgeService, ExtensionBadgeTextEnum } from './BadgeService'
 import { AdGuardSettingsDefaults, StorageService } from './StorageService'
 import AdGuardApiService from './AdGuardApiService'
 import TabService from './TabService'
-import ApiList from '../api/enum/ApiList'
 
 export default class BackgroundService {
   public static togglePiHole(): void {
@@ -49,64 +48,6 @@ export default class BackgroundService {
             BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
           })
       })
-    })
-  }
-
-  public static blacklistCurrentDomain(): void {
-    TabService.getCurrentTabUrlCleaned().then(url => {
-      if (url.length < 1) {
-        return
-      }
-      AdGuardApiService.subDomainFromList(ApiList.whitelist, url)
-        .then(() => {
-          AdGuardApiService.addDomainToList(ApiList.blacklist, url)
-            .then(() => {
-              BadgeService.setBadgeText(ExtensionBadgeTextEnum.ok)
-            })
-            .catch(reason => {
-              console.warn(reason)
-              BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
-            })
-        })
-        .catch(reason => {
-          console.warn(reason)
-          BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
-        })
-    })
-  }
-
-  public static whitelistCurrentDomain(): void {
-    TabService.getCurrentTabUrlCleaned().then(url => {
-      if (url.length < 1) {
-        return
-      }
-      AdGuardApiService.subDomainFromList(ApiList.blacklist, url)
-        .then(() => {
-          AdGuardApiService.addDomainToList(ApiList.whitelist, url)
-            .then(value => {
-              StorageService.getReloadAfterWhitelist().then(state => {
-                if (typeof state === 'undefined') {
-                  return
-                }
-                if (state) {
-                  for (const response of value) {
-                    if (response.data.message.includes('Added')) {
-                      TabService.reloadCurrentTab(1500)
-                    }
-                  }
-                }
-              })
-              BadgeService.setBadgeText(ExtensionBadgeTextEnum.ok)
-            })
-            .catch(reason => {
-              console.warn(reason)
-              BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
-            })
-        })
-        .catch(reason => {
-          console.warn(reason)
-          BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
-        })
     })
   }
 

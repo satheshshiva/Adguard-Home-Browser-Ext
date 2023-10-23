@@ -13,7 +13,6 @@ export default class ChromeRuntimeInitializer implements Initializer {
           Number(AdGuardSettingsDefaults.default_disable_time)
         )
         StorageService.saveReloadAfterDisable(true)
-        StorageService.saveReloadAfterWhitelist(true)
       } else if (details.reason === 'update' && details.previousVersion) {
         const previousVersion = Number(
           details.previousVersion.split('.').join('')

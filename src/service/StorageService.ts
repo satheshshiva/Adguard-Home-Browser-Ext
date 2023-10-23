@@ -13,9 +13,7 @@ export interface ExtensionStorage {
   adguard_settings?: AdGuardSettingsStorage[]
   default_disable_time?: number
   reload_after_disable?: boolean
-  reload_after_white_list?: boolean
   disable_list_feature?: boolean
-  disable_update_notification?: boolean
   beta_feature_flag?: boolean
   disable_context_menu?: boolean
 }
@@ -24,7 +22,6 @@ export enum ExtensionStorageEnum {
   adguard_settings = 'adguard_settings',
   default_disable_time = 'default_disable_time',
   reload_after_disable = 'reload_after_disable',
-  reload_after_white_list = 'reload_after_white_list',
   disable_list_feature = 'disable_list_feature',
   disable_update_notification = 'disable_update_notification',
   disable_context_menu = 'disable_context_menu'
@@ -94,19 +91,6 @@ export class StorageService {
     )
   }
 
-  public static saveReloadAfterWhitelist(state: boolean): void {
-    const storage: ExtensionStorage = {
-      reload_after_white_list: state
-    }
-    chrome.storage.local.set(storage)
-  }
-
-  public static getReloadAfterWhitelist(): Promise<boolean | undefined> {
-    return this.getStorageValue<boolean>(
-      ExtensionStorageEnum.reload_after_white_list
-    )
-  }
-
   public static getAdGuardSettingsArray(): Promise<
     AdGuardSettingsStorage[] | undefined
   > {
@@ -115,30 +99,10 @@ export class StorageService {
     )
   }
 
-  public static getDisableListFeature(): Promise<boolean | undefined> {
-    return this.getStorageValue<boolean>(
-      ExtensionStorageEnum.disable_list_feature
-    )
-  }
-
-  public static saveDisableListFeature(state: boolean): void {
-    const storage: ExtensionStorage = {
-      disable_list_feature: state
-    }
-    chrome.storage.local.set(storage)
-  }
-
   public static getDisableUpdateNotification(): Promise<boolean | undefined> {
     return this.getStorageValue<boolean>(
       ExtensionStorageEnum.disable_update_notification
     )
-  }
-
-  public static saveDisableUpdateNotification(state: boolean): void {
-    const storage: ExtensionStorage = {
-      disable_update_notification: state
-    }
-    chrome.storage.local.set(storage)
   }
 
   public static getDisableContextMenu(): Promise<boolean> {

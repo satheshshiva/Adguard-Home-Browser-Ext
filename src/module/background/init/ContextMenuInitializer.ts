@@ -23,24 +23,6 @@ export default class ContextMenuInitializer implements Initializer {
         contexts: ['page']
       },
       {
-        title: I18NService.translate(
-          I18NContextMenuKeys.blacklist_current_domain
-        ),
-        contexts: ['page'],
-        onclick: () => {
-          BackgroundService.blacklistCurrentDomain()
-        }
-      },
-      {
-        title: I18NService.translate(
-          I18NContextMenuKeys.whitelist_current_domain
-        ),
-        contexts: ['page'],
-        onclick: () => {
-          BackgroundService.whitelistCurrentDomain()
-        }
-      },
-      {
         type: 'separator',
         contexts: ['page']
       },
