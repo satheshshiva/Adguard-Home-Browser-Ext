@@ -22,6 +22,8 @@ export enum I18NOptionKeys {
   option_report_error_github = 'option_report_error_github',
   option_troubleshooting = 'option_troubleshooting',
   option_extension = 'option_extension',
+  option_about_disclaimer = 'option_about_disclaimer',
+  option_about_disclaimer_message = 'option_about_disclaimer_message',
   option_about_copy_debug = 'option_about_copy_debug',
   option_contributors = 'option_contributors',
   options_headline_info = 'options_headline_info',

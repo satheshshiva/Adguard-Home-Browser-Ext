@@ -3,7 +3,7 @@
     <h1 class="mb-5">
       <v-list-item>
         <v-list-item-avatar>
-          <v-img src="icon/icon-128.png"   />
+          <v-img src="icon/icon-128.png" />
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title class="text-h5">
@@ -17,7 +17,8 @@
       {{ translate(I18NOptionKeys.options_about) }}
     </h2>
     <OptionAboutExtension class="mb-5" />
-    <OptionAboutReportIssue />
+    <OptionAboutReportIssue class="mb-5" />
+    <OptionAboutDisclaimer  />
   </div>
 </template>
 
@@ -26,10 +27,12 @@ import { defineComponent } from '@vue/composition-api'
 import useTranslation from '../../../../hooks/translation'
 import OptionAboutReportIssue from '../about/OptionAboutReportIssue.vue'
 import OptionAboutExtension from '../about/OptionAboutExtension.vue'
+import OptionAboutDisclaimer from '../about/OptionAboutDisclaimer.vue'
 
 export default defineComponent({
   name: 'OptionAboutTab',
   components: {
+    OptionAboutDisclaimer,
     OptionAboutReportIssue,
     OptionAboutExtension
   },

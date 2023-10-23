@@ -34,6 +34,12 @@
 	"option_extension": {
 		"message": "Extension"
 	},
+	"option_about_disclaimer": {
+		"message": "Disclaimer"
+	},
+	"option_about_disclaimer_message": {
+		"message": "This is not an official AdGuard Home application. AdGuard, AdGuard Home are registered trademarks of AdGuard Software Ltd. Use this product at your own risk. We are not responsible for any damages to your computer or AdGuard server that may be caused by using this product."
+	},
 	"option_about_copy_debug": {
 		"message": "Please paste the following Debug-Information into the issue:"
 	},
@@ -41,7 +47,7 @@
 		"message": "Contributors:"
 	},
 	"options_headline_info": {
-		"message": "Configuration"
+		"message": "Connection"
 	},
 	"options_headline_additional_info": {
 		"message": "Enter the URL, username and password you will use to login to the AdGuard Home"
