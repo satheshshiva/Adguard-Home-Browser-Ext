@@ -28,11 +28,14 @@
 	"option_report_error_github": {
 		"message": "Create an issue on Github"
 	},
+	"option_github_open": {
+		"message": "Source code on GitHub"
+	},
 	"option_troubleshooting": {
 		"message": "Troubleshooting"
 	},
 	"option_extension": {
-		"message": "Extension"
+		"message": "AdGuard Home Browser Extension"
 	},
 	"option_about_disclaimer": {
 		"message": "Disclaimer"
@@ -41,7 +44,7 @@
 		"message": "This is not an official AdGuard Home application. AdGuard, AdGuard Home are registered trademarks of AdGuard Software Ltd. Use this product at your own risk. We are not responsible for any damages to your computer or AdGuard server that may be caused by using this product."
 	},
 	"option_about_copy_debug": {
-		"message": "Please paste the following Debug-Information into the issue:"
+		"message": "Please paste the following information in the issue:"
 	},
 	"option_contributors": {
 		"message": "Contributors:"

@@ -46,18 +46,13 @@
       <v-container fluid style="max-width: 1440px">
         <router-view></router-view>
       </v-container>
-      <v-item>
-      <v-alert color="primary" outlined>
-        {{ copyrightText }}
-      </v-alert>
-      </v-item>
     </v-main>
 
   </v-app>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from '@vue/composition-api'
+import {  defineComponent } from '@vue/composition-api'
 import { mdiCog, mdiFire, mdiGift, mdiInformationOutline } from '@mdi/js'
 import useTranslation from '../../../../hooks/translation'
 
@@ -66,13 +61,7 @@ export default defineComponent({
   setup: () => {
     const { translate, LinkConfig, I18NOptionKeys } = useTranslation()
 
-    const copyrightText = computed(() => {
-      const year = new Date().getFullYear()
-      return `(C) ${year} - Sathesh Sivashanmugam`
-    })
-
     return {
-      copyrightText,
       translate,
       LinkConfig,
       I18NOptionKeys,

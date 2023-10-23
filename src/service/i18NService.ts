@@ -20,6 +20,7 @@ export enum I18NOptionKeys {
   option_connection_check_update_available = 'option_connection_check_update_available',
   options_about_licences = 'options_about_licences',
   option_report_error_github = 'option_report_error_github',
+  option_github_open = 'option_github_open',
   option_troubleshooting = 'option_troubleshooting',
   option_extension = 'option_extension',
   option_about_disclaimer = 'option_about_disclaimer',
@@ -61,6 +62,7 @@ export enum LinkConfig {
   github_troubleshooting = 'https://github.com/badsgahhl/pihole-browser-extension#troubleshooting',
   uninstall_survey = '',
   github_issue = 'https://github.com/satheshshiva/Adguard-Home-Browser-Ext/issues',
+  github_url = 'https://github.com/satheshshiva/Adguard-Home-Browser-Ext/',
   github_user_satheshshiva = 'https://github.com/satheshshiva',
 }
 

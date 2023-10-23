@@ -7,6 +7,8 @@
       <v-btn class="mb-1" @click="openGithubReport">
         {{ translate(I18NOptionKeys.option_report_error_github) }}
       </v-btn>
+      <br>
+      <br>
       <p>{{ translate(I18NOptionKeys.option_about_copy_debug) }}</p>
       <p ref="versionInfoElement">
         AdGuard Home Browser Extension: {{ extensionVersion }} <br />Operating System:
