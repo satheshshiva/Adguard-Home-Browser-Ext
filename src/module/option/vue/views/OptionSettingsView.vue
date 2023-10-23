@@ -1,8 +1,21 @@
 <template>
   <div>
+
     <h1 class="mb-5">
-      {{ translate(I18NOptionKeys.options_settings) }}
+    <v-list-item>
+      <v-list-item-avatar>
+        <v-img src="icon/icon-128.png"   />
+      </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title class="text-h5">
+                  AdGuard Home
+                </v-list-item-title>
+              </v-list-item-content>
+    </v-list-item>
     </h1>
+    <h2 class="mb-5">
+      {{ translate(I18NOptionKeys.options_settings) }}
+    </h2>
     <v-card class="mb-5">
       <v-card-title>
         {{ translate(I18NOptionKeys.options_headline_info) }}

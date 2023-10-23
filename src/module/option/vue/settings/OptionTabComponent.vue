@@ -2,7 +2,7 @@
   <div>
     <v-tabs v-model="currentTab">
       <v-tab
-        v-for="(pi_hole_setting, index) in tabs"
+        v-for="(adguard_settings, index) in tabs"
         :key="'dyn-tab-' + index"
         @click="resetConnectionCheckAndCheck"
       >
@@ -11,12 +11,12 @@
     </v-tabs>
     <v-tabs-items v-model="currentTab">
       <v-tab-item
-        v-for="(pi_hole_setting, index) in tabs"
+        v-for="(adguard_settings, index) in tabs"
         :key="index"
         class="mt-5"
       >
         <v-text-field
-          v-model="pi_hole_setting.adguard_uri_base"
+          v-model="adguard_settings.adguard_uri_base"
           v-debounce:500ms="connectionCheck"
           outlined
           debounce-events="input"
@@ -30,12 +30,14 @@
           required
         ></v-text-field>
         <v-text-field
-          v-model="pi_hole_setting.username"
+          v-model="adguard_settings.username"
+          v-debounce:500ms="connectionCheck"
           outlined
           :label="translate(I18NOptionKeys.options_username)"
         ></v-text-field>
         <v-text-field
-          v-model="pi_hole_setting.password"
+          v-model="adguard_settings.password"
+          v-debounce:500ms="connectionCheck"
           outlined
           :type="passwordInputType"
           :append-icon="
@@ -74,20 +76,8 @@
           {{ connectionCheckVersionText }}
         </v-alert>
         <v-alert v-if="connectionCheckStatus === 'ERROR'" outlined type="error">
-          {{ translate(I18NOptionKeys.option_connection_check_error) }}
-        </v-alert>
-        <v-alert
-          v-if="
-            connectionCheckStatus === 'OK' &&
-              connectionCheckData !== null &&
-              (connectionCheckData.version)
-          "
-          outlined
-          type="info"
-        >
-          {{
-            translate(I18NOptionKeys.option_connection_check_update_available)
-          }}
+          {{ translate(I18NOptionKeys.option_connection_check_error) }}<br />
+          {{checkErrorMsg()}}
         </v-alert>
       </v-tab-item>
     </v-tabs-items>
@@ -141,6 +131,7 @@ export default defineComponent({
     const connectionCheckStatus = ref<ConnectionCheckStatus>(
       ConnectionCheckStatus.IDLE
     )
+    let errorMsg:string="null"
 
     const connectionCheckData = ref<AdGuardVersion | null>(null)
 
@@ -153,11 +144,15 @@ export default defineComponent({
           if (typeof result.data === 'object') {
             connectionCheckStatus.value = ConnectionCheckStatus.OK
             connectionCheckData.value = result.data
+            errorMsg=""
           } else {
             connectionCheckStatus.value = ConnectionCheckStatus.ERROR
+            errorMsg=`Unexpected response from server: ${result.data}`
           }
         })
-        .catch(() => {
+        .catch((e) => {
+          errorMsg=`${e}`
+          console.warn(errorMsg)
           connectionCheckStatus.value = ConnectionCheckStatus.ERROR
         })
     }
@@ -212,9 +207,11 @@ export default defineComponent({
       { deep: true }
     )
 
+    const checkErrorMsg = () => errorMsg
+
     const connectionCheckVersionText = computed(() => {
       const data = connectionCheckData.value
-      return `Version: ${data?.version}`
+      return `AdGuard Home Server: ${data?.version}`
     })
 
     const toggleApiKeyVisibility = () => {
@@ -256,6 +253,7 @@ export default defineComponent({
       connectionCheckVersionText,
       connectionCheckStatus,
       connectionCheckData,
+      checkErrorMsg,
       ...useTranslation()
     }
   }

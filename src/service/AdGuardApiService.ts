@@ -217,7 +217,7 @@ export default class AdGuardApiService {
             if(data.trim()==="Forbidden"){
               throw Error(`Forbidden: Please check the credentials.`)
             }
-            throw Error(`[requestClient] Error parsingJSON data - ${JSON.stringify(error)}`
+            throw Error(`Unexpected error: ${error}:${data}`
             );
           }
           return resp

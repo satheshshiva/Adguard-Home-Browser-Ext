@@ -3,14 +3,14 @@
     <v-navigation-drawer app>
       <v-list-item>
         <v-list-item-avatar>
-          <v-img height="60px" src="icon/icon-128.png" contain />
+          <v-img height="60px" src="icon/icon-128.png"  contain />
         </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title class="text-h6">
-            AdGuard Home
-            <br />Browser <br />Extension
-          </v-list-item-title>
-        </v-list-item-content>
+<!--        <v-list-item-content>-->
+<!--          <v-list-item-title class="text-h6">-->
+<!--            AdGuard Home-->
+<!--            <br />Browser <br />Extension-->
+<!--          </v-list-item-title>-->
+<!--        </v-list-item-content>-->
       </v-list-item>
 
       <v-divider></v-divider>
@@ -40,17 +40,19 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-      <template #append>
-        <v-alert color="primary" outlined class="mx-5">
-          {{ copyrightText }}
-        </v-alert>
-      </template>
+
     </v-navigation-drawer>
     <v-main>
       <v-container fluid style="max-width: 1440px">
         <router-view></router-view>
       </v-container>
+      <v-item>
+      <v-alert color="primary" outlined>
+        {{ copyrightText }}
+      </v-alert>
+      </v-item>
     </v-main>
+
   </v-app>
 </template>
 

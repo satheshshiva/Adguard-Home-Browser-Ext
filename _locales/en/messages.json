@@ -41,7 +41,7 @@
 		"message": "Contributors:"
 	},
 	"options_headline_info": {
-		"message": "AdGuard Home Configuration"
+		"message": "Configuration"
 	},
 	"options_headline_additional_info": {
 		"message": "Enter the URL, username and password you will use to login to the AdGuard Home"
