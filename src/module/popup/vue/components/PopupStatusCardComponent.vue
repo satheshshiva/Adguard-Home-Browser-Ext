@@ -179,14 +179,11 @@ export default defineComponent({
       if (time >= 0) {
         AdGuardApiService.changeAdGuardStatus(currentMode, time)
           .then(value => {
-            for (const piHoleStatus of value) {
-              if (
-                piHoleStatus.data !== "OK"
-              ) {
+            for (const adGuardStatus of value) {
+              if (adGuardStatus.data !== "OK") {
                 throwConsoleBadgeError(
-                  'Atleast one AdGuard instance(s) returned error from its request. Please check the credentials.',
-                  true
-                )
+                  `Change status failed in one or more adGuard instance(s): Error:${ adGuardStatus.data}:typof ${ typeof "OK"}comparison: ${adGuardStatus.data ==="OK"}`,
+                  true )
                 return
               }
             }

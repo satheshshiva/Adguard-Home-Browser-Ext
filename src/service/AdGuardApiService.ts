@@ -11,6 +11,9 @@ const statusEndpoint="control/status"
 const changeStatusEndpoint="control/protection"
 
 export default class AdGuardApiService {
+  /**
+   * Get AdGuard server status of all the instances
+   */
   public static async getAdGuardStatusCombined(): Promise<AdGuardApiStatusEnum> {
     return new Promise<AdGuardApiStatusEnum>(resolve => {
       this.getAdGuardStatus()
@@ -30,6 +33,9 @@ export default class AdGuardApiService {
     })
   }
 
+  /**
+   * Get AdGuard server status
+   */
   public static async getAdGuardStatus(): Promise<
     AxiosResponse<AdGuardApiStatus>[]
   > {
@@ -59,6 +65,9 @@ export default class AdGuardApiService {
     return Promise.all(promiseArray)
   }
 
+  /**
+   * Get AdGuard Server versions of all instances
+   */
   public static async getAdGuardVersions(): Promise<
     AxiosResponse<AdGuardVersion>[]
   > {
@@ -75,6 +84,10 @@ export default class AdGuardApiService {
     return Promise.all(promiseArray)
   }
 
+  /**
+   * Get AdGuard server Version
+   * @param adGuard
+   */
   public static async getAdGuardVersion(
     adGuard: AdGuardSettingsStorage
   ): Promise<AxiosResponse<AdGuardVersion>> {
@@ -90,6 +103,11 @@ export default class AdGuardApiService {
     return axios.get<AdGuardVersion>(url.href, this.getAxiosConfig(adGuard.username, adGuard.password))
   }
 
+  /**
+   * Change AdGuard Status
+   * @param mode
+   * @param time
+   */
   public static async changeAdGuardStatus(
     mode: AdGuardApiStatusEnum,
     time: number
@@ -124,10 +142,9 @@ export default class AdGuardApiService {
       } else {
         return Promise.reject(`Mode ${mode} not allowed for this function.`)
       }
-
       promiseArray.push(
-        axios.post<string>(url.href, data, this.getAxiosConfig(adguard.username, adguard.password))
-      )
+            axios.post(url.href, data, this.getAxiosConfigStr(adguard.username, adguard.password))
+            )
     }
 
     return Promise.all(promiseArray)
@@ -186,6 +203,16 @@ export default class AdGuardApiService {
   private static getAxiosConfig(u:string, p:string): AxiosRequestConfig {
     return {
       transformResponse: data => JSON.parse(data),
+      auth: {
+        username: u,
+        password: p
+      }
+    }
+  }
+
+  private static getAxiosConfigStr(u:string, p:string): AxiosRequestConfig {
+    return {
+      transformResponse: data => data.trim(),
       auth: {
         username: u,
         password: p
