@@ -1,18 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer app>
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-img height="60px" src="icon/icon-128.png"  contain />
-        </v-list-item-avatar>
-<!--        <v-list-item-content>-->
-<!--          <v-list-item-title class="text-h6">-->
-<!--            AdGuard Home-->
-<!--            <br />Browser <br />Extension-->
-<!--          </v-list-item-title>-->
-<!--        </v-list-item-content>-->
-      </v-list-item>
-
+          <v-img  src="icon/icon_raw.png" style="height: 150px" class="justify-center ma-5" contain />
       <v-divider></v-divider>
 
       <v-list dense nav>
@@ -43,7 +32,7 @@
 
     </v-navigation-drawer>
     <v-main>
-      <v-container fluid style="max-width: 800px">
+      <v-container fluid style="max-width: 800px;">
         <router-view></router-view>
       </v-container>
     </v-main>

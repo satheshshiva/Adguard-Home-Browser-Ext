@@ -94,7 +94,7 @@
 		"message": "Disable update notification in the popup"
 	},
 	"popup_status_card_title": {
-		"message": "AdGuard Home Switch"
+		"message": "AdGuard Home"
 	},
 	"popup_status_card_info_text": {
 		"message": "0 for permanent"

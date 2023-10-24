@@ -10,6 +10,17 @@
       </v-icon>
     </v-card-title>
     <v-card-text>
+      <div class="d-flex flex justify-center">
+        <v-switch
+          v-model="sliderChecked"
+          style="transform: scale(1.5)"
+          inset
+          color="green"
+          :disabled="sliderDisabled"
+          @change="sliderClicked()"
+        ></v-switch>
+      </div>
+
       <v-text-field
         v-model="defaultDisableTime"
         :disabled="defaultDisableTimeDisabled"
@@ -24,16 +35,6 @@
           {{ translate(I18NPopupKeys.popup_status_card_info_text) }}
         </template>
       </v-text-field>
-      <div class="d-flex flex justify-center">
-        <v-switch
-          v-model="sliderChecked"
-          style="transform: scale(1.5)"
-          inset
-          color="green"
-          :disabled="sliderDisabled"
-          @change="sliderClicked()"
-        ></v-switch>
-      </div>
     </v-card-text>
   </v-card>
 </template>

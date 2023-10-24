@@ -1,11 +1,11 @@
 <template>
-  <v-app id="popup">
-    <v-container fluid>
+  <v-app id="popup" >
+    <v-container fluid  >
       <PopupStatusCardComponent
         v-if="isActiveByBadgeLoaded"
         v-model="isActiveByRealStatus"
         :is-active-by-badge="isActiveByBadge"
-        class="mb-5"
+        class=""
       />
       <PopupUpdateAlertComponent v-if="!isActiveByRealStatus" />
     </v-container>
