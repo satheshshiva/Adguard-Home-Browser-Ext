@@ -122,6 +122,23 @@ export default defineComponent({
       }
     }
 
+    const checkProtectionDuration =() => {
+      AdGuardApiService.getAdGuardStatus().then(status => {
+        if (status?.length > 0) {
+          // here am hardcoding to get the status of only the first instance.
+          if (status[0].data.protection_disabled_duration > 0) {
+            console.log(
+              `status[0].data.protection_disabled_duration::${status[0].data.protection_disabled_duration}`
+            )
+            protectionDisabledDuration.value = status[0].data.protection_disabled_duration;
+            return;
+          }
+        }
+        protectionDisabledDuration.value=0;
+        }
+      )
+    }
+
     /**
      * Update status of all the UI components. Called when the popup is initialized.
      */
@@ -140,17 +157,7 @@ export default defineComponent({
           updateComponentsByData(value)
           // if the current status is disabled then if there is a protection_disabled_duration available
           if (value === AdGuardApiStatusEnum.disabled) {
-            AdGuardApiService.getAdGuardStatus().then(status => {
-              if (status?.length > 0) {
-                // here am hardcoding to get the status of only the first instance.
-                if (status[0].data.protection_disabled_duration > 0) {
-                  console.log(
-                    `status[0].data.protection_disabled_duration::${status[0].data.protection_disabled_duration}`
-                  )
-                    protectionDisabledDuration.value = status[0].data.protection_disabled_duration
-                }
-              }
-            })
+            checkProtectionDuration();
           }
         })
         .catch(() => updateComponentsByData(AdGuardApiStatusEnum.error))
@@ -165,6 +172,7 @@ export default defineComponent({
       AdGuardApiService.getAdGuardStatusCombined()
         .then(data => {
           updateComponentsByData(data)
+          checkProtectionDuration();
           if (data === AdGuardApiStatusEnum.disabled) {
             const reloadAfterDisableCallback = (
               is_enabled: boolean | undefined
