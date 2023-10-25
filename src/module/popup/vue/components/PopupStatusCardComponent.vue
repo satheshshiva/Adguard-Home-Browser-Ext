@@ -127,9 +127,6 @@ export default defineComponent({
         if (status?.length > 0) {
           // here am hardcoding to get the status of only the first instance.
           if (status[0].data.protection_disabled_duration > 0) {
-            console.log(
-              `status[0].data.protection_disabled_duration::${status[0].data.protection_disabled_duration}`
-            )
             protectionDisabledDuration.value = status[0].data.protection_disabled_duration;
             return;
           }
@@ -162,11 +159,6 @@ export default defineComponent({
         })
         .catch(() => updateComponentsByData(AdGuardApiStatusEnum.error))
     }
-
-    // const getProtectionDisabledDuration = computed( () =>{
-    //   console.log(`SUPER ${protectionDisabledDuration.value}`  )
-    //   return String(protectionDisabledDuration.value);
-    // })
 
     const onSliderClickSuccessHandler = () => {
       AdGuardApiService.getAdGuardStatusCombined()
