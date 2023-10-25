@@ -93,6 +93,7 @@ export default defineComponent({
     const defaultDisableTimeDisabled = ref(!props.isActiveByBadge)
     const protectionDisabledDuration = ref(0)
     const beautifyDisabledDuration = ref('')
+    let intervalId:number;
 
     const defaultDisableTime = ref<number>(
       AdGuardSettingsDefaults.default_disable_time
@@ -131,8 +132,8 @@ export default defineComponent({
         emit('updateStatus', false)
       }
     }
-
     const showTimerDisabledDuration = () => {
+      clearInterval(intervalId);
       let duration = Math.trunc(protectionDisabledDuration.value / 1000);
       const MINUTE=60;
       const HOUR=MINUTE * 60;
@@ -141,28 +142,29 @@ export default defineComponent({
 
       const convertString = () =>{
         let str = '';
-        if (duration > DAY) {
-          str += `${Math.trunc(duration / DAY)}D:`;
-          duration %= DAY;
+        let d = duration;
+        if (d > DAY) {
+          str += `${Math.trunc(d / DAY)}D:`;
+          d %= DAY;
         }
-        if(duration > HOUR){
-          str += `${Math.trunc(duration / HOUR)}H:`;
-          duration %= HOUR;
+        if(d > HOUR){
+          str += `${Math.trunc(d / HOUR)}H:`;
+          d %= HOUR;
         }
-        if(duration > MINUTE){
-          str += `${Math.trunc(duration / MINUTE)}M:`;
-          duration %= MINUTE;
+        if(d > MINUTE){
+          str += `${Math.trunc(d / MINUTE)}M:`;
+          d %= MINUTE;
         }
-        if(duration>0){
-          str+=`${duration}s`;
+        if(d>0){
+          str+=`${d}s`;
         }
         beautifyDisabledDuration.value = str;
-        duration -= 1;
       }
 
-      convertString();
-      const intervalId = setInterval( () => {
+      // convertString();
+      intervalId = setInterval( () => {
         convertString();
+        duration--;
       if(duration <=0){
         clearInterval(intervalId);
       }
@@ -181,8 +183,8 @@ export default defineComponent({
             return
           }
         }
-        protectionDisabledDuration.value = 0
-        showTimerDisabledDuration()
+        protectionDisabledDuration.value = 0;
+        showTimerDisabledDuration();
       })
     }
 
@@ -258,6 +260,8 @@ export default defineComponent({
         : AdGuardApiStatusEnum.disabled
 
       const time: number = defaultDisableTime.value
+      clearInterval(intervalId);
+      protectionDisabledDuration.value=0;
 
       if (time >= 0) {
         AdGuardApiService.changeAdGuardStatus(currentMode, time)
