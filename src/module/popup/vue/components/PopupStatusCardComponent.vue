@@ -28,10 +28,18 @@
           Protection is disabled
         </h4>
       </div>
-      <div  v-if="protectionDisabledDuration>0" class="d-flex flex justify-center mt-2">
-        <h5 >Enabling protection in {{protectionDisabledDuration}}ms</h5>
+      <div
+        v-if="protectionDisabledDuration > 0"
+        class="d-flex flex justify-center mt-2"
+      >
+        <h5>
+          Enabling protection in {{ beautifyDisabledDuration }}
+        </h5>
       </div>
-      <v-divider class="border-opacity-100 mt-5 mb-5" color="primary"></v-divider>
+      <v-divider
+        class="border-opacity-100 mt-5 mb-5"
+        color="primary"
+      ></v-divider>
       <v-text-field
         v-model="defaultDisableTime"
         :disabled="defaultDisableTimeDisabled"
@@ -84,6 +92,8 @@ export default defineComponent({
     const sliderDisabled = ref(!props.isActiveByBadge)
     const defaultDisableTimeDisabled = ref(!props.isActiveByBadge)
     const protectionDisabledDuration = ref(0)
+    const beautifyDisabledDuration = ref('')
+
     const defaultDisableTime = ref<number>(
       AdGuardSettingsDefaults.default_disable_time
     )
@@ -122,18 +132,58 @@ export default defineComponent({
       }
     }
 
-    const checkProtectionDuration =() => {
+    const showTimerDisabledDuration = () => {
+      let duration = Math.trunc(protectionDisabledDuration.value / 1000);
+      const MINUTE=60;
+      const HOUR=MINUTE * 60;
+      const DAY=HOUR * 24;
+      const TIMEOUT=1000;
+
+      const convertString = () =>{
+        let str = '';
+        if (duration > DAY) {
+          str += `${Math.trunc(duration / DAY)}D:`;
+          duration %= DAY;
+        }
+        if(duration > HOUR){
+          str += `${Math.trunc(duration / HOUR)}H:`;
+          duration %= HOUR;
+        }
+        if(duration > MINUTE){
+          str += `${Math.trunc(duration / MINUTE)}M:`;
+          duration %= MINUTE;
+        }
+        if(duration>0){
+          str+=`${duration}s`;
+        }
+        beautifyDisabledDuration.value = str;
+        duration -= 1;
+      }
+
+      convertString();
+      const intervalId = setInterval( () => {
+        convertString();
+      if(duration <=0){
+        clearInterval(intervalId);
+      }
+      }, TIMEOUT);
+
+
+    }
+
+    const checkProtectionDuration = () => {
       AdGuardApiService.getAdGuardStatus().then(status => {
         if (status?.length > 0) {
           // here am hardcoding to get the status of only the first instance.
           if (status[0].data.protection_disabled_duration > 0) {
-            protectionDisabledDuration.value = status[0].data.protection_disabled_duration;
-            return;
+            protectionDisabledDuration.value = status[0].data.protection_disabled_duration
+            showTimerDisabledDuration()
+            return
           }
         }
-        protectionDisabledDuration.value=0;
-        }
-      )
+        protectionDisabledDuration.value = 0
+        showTimerDisabledDuration()
+      })
     }
 
     /**
@@ -154,7 +204,7 @@ export default defineComponent({
           updateComponentsByData(value)
           // if the current status is disabled then if there is a protection_disabled_duration available
           if (value === AdGuardApiStatusEnum.disabled) {
-            checkProtectionDuration();
+            checkProtectionDuration()
           }
         })
         .catch(() => updateComponentsByData(AdGuardApiStatusEnum.error))
@@ -164,7 +214,7 @@ export default defineComponent({
       AdGuardApiService.getAdGuardStatusCombined()
         .then(data => {
           updateComponentsByData(data)
-          checkProtectionDuration();
+          checkProtectionDuration()
           if (data === AdGuardApiStatusEnum.disabled) {
             const reloadAfterDisableCallback = (
               is_enabled: boolean | undefined
@@ -243,10 +293,11 @@ export default defineComponent({
       defaultDisableTime,
       defaultDisableTimeDisabled,
       protectionDisabledDuration,
+      beautifyDisabledDuration,
       sliderChecked,
       sliderDisabled,
       timeUnitIcon,
-   //   getProtectionDisabledDuration,
+      //   getProtectionDisabledDuration,
       mdiCog,
       sliderClicked,
       openOptions,
