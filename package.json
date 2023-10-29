@@ -1,5 +1,5 @@
 {
-	"name": "pihole-browser-extension",
+	"name": "adguard-browser-extension",
 	"version": "3.0.2",
 	"dependencies": {
 		"@vue/composition-api": "^1.4.0",
@@ -43,7 +43,7 @@
 		"webpack-cli": "^4.9.1",
 		"zip-webpack-plugin": "^4.0.1"
 	},
-	"description": "Browser extension to control your PiHole. Built with Vue, Typescript and ❤",
+	"description": "Browser extension to control your AdGuard Home. Built with Vue, Typescript and ❤",
 	"scripts": {
 		"start-chrome": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=development -w --progress --config src/webpack/webpack.chrome.ts",
 		"start-firefox": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=development -w --progress --config src/webpack/webpack.firefox.ts",
@@ -55,10 +55,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/badsgahhl/pihole-browser-extension.git"
+		"url": "https://github.com/satheshshiva/Adguard-Home-Browser-Ext.git"
 	},
 	"keywords": [
-		"pihole",
+		"adguard",
 		"extension",
 		"chrome",
 		"firefox",
@@ -68,7 +68,7 @@
 	"author": "Sathesh Sivashanmugam",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/badsgahhl/pihole-browser-extension/issues"
+		"url": "https://github.com/satheshshiva/Adguard-Home-Browser-Ext/issues"
 	},
-	"homepage": "https://github.com/badsgahhl/pihole-browser-extension/#readme"
+	"homepage": "hhttps://github.com/satheshshiva/Adguard-Home-Browser-Ext/#readme"
 }

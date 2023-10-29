@@ -34,8 +34,8 @@
 		"contextMenus"
 	],
 	"commands": {
-		"hotkey-toggle-pihole": {
-			"description": "__MSG_context_menu_toggle_pi_holes__"
+		"hotkey-toggle-adguard": {
+			"description": "__MSG_context_menu_toggle_adguard__"
 		},
 		"hotkey-blacklist-current-domain": {
 			"description": "__MSG_context_menu_blacklist_current_domain__"

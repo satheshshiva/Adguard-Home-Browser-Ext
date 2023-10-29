@@ -1,6 +1,6 @@
 Copyright (c) 2023 Sathesh Sivashanmugam
 
-The browser extension "pihole-extension" has the possibility to access private data and confidential information via your browser.
+The browser extension "adguard-extension" has the possibility to access private data and confidential information via your browser.
 
-These permissions are needed to send so called "requests" to your local PiHole server.
+These permissions are needed to send so called "requests" to your local AdGuard server.
 The extension neither collects user data, nor does it establish a connection to servers outside of the addresses you provide.

@@ -24,18 +24,18 @@ export default class TabService {
     // Domains that should not be listed anyway.
     let excludesDomains: Array<string> = ['localhost', '127.0.0.1', 'pi.hole']
 
-    const piHoleUrls = await StorageService.getAdGuardSettingsArray()
-    const piHoleUrlsArray: Array<string> = []
-    if (typeof piHoleUrls !== 'undefined') {
-      piHoleUrls.forEach((value: AdGuardSettingsStorage) => {
+    const adGuardUrls = await StorageService.getAdGuardSettingsArray()
+    const adGuardUrlsArray: Array<string> = []
+    if (typeof adGuardUrls !== 'undefined') {
+      adGuardUrls.forEach((value: AdGuardSettingsStorage) => {
         if (value.adguard_uri_base) {
-          piHoleUrlsArray.push(new URL(value.adguard_uri_base).hostname)
+          adGuardUrlsArray.push(new URL(value.adguard_uri_base).hostname)
         }
       })
     }
 
-    if (piHoleUrlsArray.length > 0) {
-      excludesDomains = excludesDomains.concat(piHoleUrlsArray)
+    if (adGuardUrlsArray.length > 0) {
+      excludesDomains = excludesDomains.concat(adGuardUrlsArray)
     }
 
     // Checking regex

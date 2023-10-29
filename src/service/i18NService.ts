@@ -58,8 +58,6 @@ export enum I18NPopupKeys {
 }
 
 export enum LinkConfig {
-  paypal_donation_link = 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3H9XJUKXMSG22&source=url',
-  github_troubleshooting = 'https://github.com/badsgahhl/pihole-browser-extension#troubleshooting',
   uninstall_survey = '',
   github_issue = 'https://github.com/satheshshiva/Adguard-Home-Browser-Ext/issues',
   github_url = 'https://github.com/satheshshiva/Adguard-Home-Browser-Ext/',

@@ -39,7 +39,7 @@ export class BadgeService {
   }
 
   /**
-   * Compares the badge text with the PiHoleApiStatus
+   * Compares the badge text with the AdGuardApiStatus
    * Returns false if they are not equal
    */
   public static compareBadgeTextToApiStatusEnum(

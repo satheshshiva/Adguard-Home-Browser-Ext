@@ -5,7 +5,7 @@ import AdGuardApiService from './AdGuardApiService'
 import TabService from './TabService'
 
 export default class BackgroundService {
-  public static togglePiHole(): void {
+  public static toggleInstance(): void {
     let newStatus: AdGuardApiStatusEnum
     BadgeService.getBadgeText().then(result => {
       if (result === ExtensionBadgeTextEnum.disabled) {

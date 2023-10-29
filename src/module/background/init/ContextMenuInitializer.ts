@@ -15,7 +15,7 @@ export default class ContextMenuInitializer implements Initializer {
         title: I18NService.translate(I18NContextMenuKeys.toggle_pi_holes),
         contexts: ['page'],
         onclick: () => {
-          BackgroundService.togglePiHole()
+          BackgroundService.toggleInstance()
         }
       },
       {

@@ -159,12 +159,12 @@ export default defineComponent({
           str+=`${d}s`;
         }
         beautifyDisabledDuration.value = str;
+        duration--;
       }
 
-      // convertString();
+      convertString();
       intervalId = setInterval( () => {
         convertString();
-        duration--;
       if(duration <=0){
         clearInterval(intervalId);
       }
