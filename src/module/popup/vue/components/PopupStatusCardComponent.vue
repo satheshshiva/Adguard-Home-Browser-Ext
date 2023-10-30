@@ -96,7 +96,8 @@ export default defineComponent({
       {title:'10 min', value:10*60*1000},
       {title:'1 hr', value:60*60*1000},
       {title:'24 hrs', value:24*60*60*1000},
-    ])
+    ]);
+
     let intervalId:number;
 
     const defaultDisableTime = ref<number>(
@@ -257,12 +258,6 @@ export default defineComponent({
       // eslint-disable-next-line no-undef
       chrome.runtime.openOptionsPage()
     }
-
-    const onChangeDisableTime = () => {
-      sliderChecked.value = false;
-      sliderClicked();
-    }
-
     const sliderClicked = () => {
       const currentMode = sliderChecked.value
         ? AdGuardApiStatusEnum.enabled
@@ -295,6 +290,10 @@ export default defineComponent({
           true
         )
       }
+    }
+    const onChangeDisableTime = () => {
+      sliderChecked.value = false;
+      sliderClicked();
     }
 
     onMounted(() => {
