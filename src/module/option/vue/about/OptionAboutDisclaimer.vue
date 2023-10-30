@@ -3,12 +3,12 @@
     <v-card-title>
       {{ translate(I18NOptionKeys.option_about_disclaimer) }}
     </v-card-title>
-    <v-card-text>
-      <p>
+    <v-card-text >
+      <span style="font-size: 0.9em;">
         {{ translate(I18NOptionKeys.option_about_disclaimer_message) }}
         <br />
 
-      </p>
+      </span>
     </v-card-text>
   </v-card>
 </template>

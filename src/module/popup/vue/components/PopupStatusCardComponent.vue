@@ -1,7 +1,14 @@
 <template>
-    <v-container fluid class="">
+    <v-container fluid class="pa-6">
       <div class="d-flex justify-space-between">
+        <div class="d-flex justify-start align-center ">
+        <v-avatar size="40">
+          <v-img src="icon/icon-128.png" />
+        </v-avatar>
+          <h2>
         {{ translate(I18NPopupKeys.popup_status_card_title) }}
+          </h2>
+        </div>
         <v-icon
           right
           :title="translate(I18NOptionKeys.options_settings)"
