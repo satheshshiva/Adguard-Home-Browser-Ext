@@ -8,7 +8,7 @@ This extension controls the protection of [AdGuard Home](https://github.com/Adgu
 ## Features:
 ✓ Disable protection for specific time  
 ✓ Supports multiple instances  
-✓ Supports chrome, firefox browsers
+✓ Tested in Mozilla Firefox, Google Chrome, Microsoft Edge browsers
 
 ## Build
 Follow these instructions to build and run the project.
