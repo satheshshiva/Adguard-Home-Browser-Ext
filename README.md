@@ -23,9 +23,9 @@ Follow these instructions to build and run the project.
 
 ## Screenshots
 <div style="text-align:center">
-   <img src="docs/screenshots/screenshot1.png" width="250" hspace="20"/>
-   <img src="docs/screenshots/screenshot2.png" width="250" hspace="20"/>
-   <img src="docs/screenshots/screenshot3.png" width="250" hspace="20"/>
+   <img src="docs/firefox/screenshots/screenshot1.png" width="250" hspace="20"/>
+   <img src="docs/firefox/screenshots/screenshot2.png" width="250" hspace="20"/>
+   <img src="docs/firefox/screenshots/screenshot3.png" width="250" hspace="20"/>
 </div>
 
 ## Contributing Guidelines
