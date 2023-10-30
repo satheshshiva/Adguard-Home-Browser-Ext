@@ -3,7 +3,7 @@
 		"message": "Browser extension to control your AdGuard Home. Built with Vue and Typescript."
 	},
 	"options_title": {
-		"message": "$page$ - AdGuard Home Browser Extension",
+		"message": "$page$ - AdGuard Home Control",
 		"placeholders": {
 			"page": {
 				"content": "$1"
@@ -35,7 +35,7 @@
 		"message": "Troubleshooting"
 	},
 	"option_extension": {
-		"message": "AdGuard Home Browser Extension"
+		"message": "AdGuard Home Control"
 	},
 	"option_about_disclaimer": {
 		"message": "Disclaimer"

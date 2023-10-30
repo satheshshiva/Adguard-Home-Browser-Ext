@@ -1,6 +1,6 @@
 {
 	"manifest_version": 2,
-	"name": "AdGuard Home Browser Extension",
+	"name": "AdGuard Home Control",
 	"version": "1.0",
 	"author": "Sathesh Sivashanmugam",
 	"description": "__MSG_manifest_description__",
