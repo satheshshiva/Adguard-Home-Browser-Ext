@@ -34,17 +34,6 @@
 		"contextMenus"
 	],
 	"commands": {
-		"hotkey-toggle-adguard": {
-			"description": "__MSG_context_menu_toggle_adguard__"
-		},
-		"hotkey-blacklist-current-domain": {
-			"description": "__MSG_context_menu_blacklist_current_domain__"
-		},
-		"hotkey-whitelist-current-domain": {
-			"description": "__MSG_context_menu_whitelist_current_domain__"
-		},
-		"hotkey-open-settings": {
-			"description": "__MSG_context_menu_open_settings__"
-		}
+		
 	}
 }
