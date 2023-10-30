@@ -1,4 +1,4 @@
-<p style="text-align:center"><img src="icon/icon_raw.png" width="150"/></p>
+<p align="center"><img src="icon/icon_raw.png" width="150"/></p>
 <h2 align="center"><b>AdGuard Home Browser Extension</b></h2>
 <h4 align="center">Extension to control AdGuard Home DNS from your browser</h4>
 
@@ -32,3 +32,6 @@ Read the contributing guidelines [here](CONTRIBUTING.md)
 
 ## Thanks
 This project is inspired from the [PiHole browser extension](https://github.com/badsgahhl/pihole-browser-extension) project. 
+
+## Disclaimer
+This is not an official AdGuard Home application. AdGuard, AdGuard Home are registered trademarks of AdGuard Software Ltd. Use this product at your own risk. We are not responsible for any damages to your computer or AdGuard server that may be caused by using this product.
