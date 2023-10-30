@@ -3,7 +3,7 @@
 <h4 align="center">Extension to control AdGuard Home DNS from your browser</h4>
 
 ## AdGuard Home Browser Extension
-This browser extension controls the protection of [AdGuard Home](https://github.com/AdguardTeam/AdGuardHome) right from your browser.
+This extension controls the protection of [AdGuard Home](https://github.com/AdguardTeam/AdGuardHome) right from your browser.
 
 ## Features:
 ✓ Disable protection for specific time  
