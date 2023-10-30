@@ -14,11 +14,12 @@ This extension controls the protection of [AdGuard Home](https://github.com/Adgu
 Follow these instructions to build and run the project.
 
 1. Clone this repository.
-2. You need to have the latest version of node
-3. Run `npm run start-firefox`
-4. In firefox browser, go to `about:debugging` -> `Load Temporary Add-on`
-5. Point to the `dist` -> `firefox` -> `mainifest.json`
-6. This extension should not be visible in the  Extension in toolbar.
+1. You need to have the latest version of npm.
+1. Install cross-env, `npm install cross-env`
+1. Run `npm run start-firefox` from the project folder
+1. In firefox browser, go to `about:debugging` -> `Load Temporary Add-on`
+1. Point to the `dist` -> `firefox` -> `mainifest.json`
+1. This extension should not be visible in the  Extension in toolbar.
 
 ## Screenshots
 <div style="text-align:center">
