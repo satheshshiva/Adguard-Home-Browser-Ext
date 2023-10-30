@@ -19,7 +19,7 @@ Follow these instructions to build and run the project.
 1. Run `npm run start-firefox` from the project folder
 1. In firefox browser, go to `about:debugging` -> `Load Temporary Add-on`
 1. Point to the `dist` -> `firefox` -> `mainifest.json`
-1. This extension should not be visible in the  Extension in toolbar.
+1. This extension should now be visible in the  Extension in toolbar.
 
 ## Screenshots
 <div style="text-align:center">
