@@ -99,6 +99,9 @@
 	"popup_status_card_info_text": {
 		"message": "0 for permanent"
 	},
+	"popup_status_card_select_text": {
+		"message": "Disable period"
+	},
 	"popup_second_card_current_url": {
 		"message": "Current Url"
 	},

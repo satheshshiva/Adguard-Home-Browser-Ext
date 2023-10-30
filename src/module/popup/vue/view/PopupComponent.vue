@@ -66,6 +66,6 @@ export default defineComponent({
 
 <style lang="scss">
 #popup {
-  width: 250px;
+  width: 300px;
 }
 </style>

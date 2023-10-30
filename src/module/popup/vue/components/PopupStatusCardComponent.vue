@@ -40,24 +40,20 @@
         class="border-opacity-100 mt-5 mb-5"
         color="primary"
       ></v-divider>
-      <v-text-field
+
+      <v-select
         v-model="defaultDisableTime"
+        :label="translate(I18NPopupKeys.popup_status_card_select_text)"
         :disabled="defaultDisableTimeDisabled"
-        type="number"
-        min="0"
-        outlined
-        :rules="[v => typeof v === 'number' || v >= 0]"
-        :suffix="defaultDisableTime > 0 ? 's' : ''"
-        :append-icon="timeUnitIcon"
-      >
-        <template #label>
-          {{ translate(I18NPopupKeys.popup_status_card_info_text) }}
-        </template>
-      </v-text-field>
+        :items="disablePeriodSelect"
+        item-text="title"
+        item-value="value"
+        @input="onChangeDisableTime()"
+      ></v-select>
+
     </v-card-text>
   </v-card>
 </template>
-
 <script lang="ts">
 import { mdiAllInclusive, mdiCog, mdiTimerOutline } from '@mdi/js'
 import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
@@ -93,6 +89,14 @@ export default defineComponent({
     const defaultDisableTimeDisabled = ref(!props.isActiveByBadge)
     const protectionDisabledDuration = ref(0)
     const beautifyDisabledDuration = ref('')
+    const disablePeriodSelect = ref([
+      {title:'∞ Until turned on', value:0},
+      {title:'30 secs', value:30*1000},
+      {title:'1 min', value:60*1000},
+      {title:'10 min', value:10*60*1000},
+      {title:'1 hr', value:60*60*1000},
+      {title:'24 hrs', value:24*60*60*1000},
+    ])
     let intervalId:number;
 
     const defaultDisableTime = ref<number>(
@@ -144,15 +148,15 @@ export default defineComponent({
         let str = '';
         let d = duration;
         if (d > DAY) {
-          str += `${Math.trunc(d / DAY)}D:`;
+          str += `${Math.trunc(d / DAY)}d:`;
           d %= DAY;
         }
         if(d > HOUR){
-          str += `${Math.trunc(d / HOUR)}H:`;
+          str += `${Math.trunc(d / HOUR)}h:`;
           d %= HOUR;
         }
         if(d > MINUTE){
-          str += `${Math.trunc(d / MINUTE)}M:`;
+          str += `${Math.trunc(d / MINUTE)}m:`;
           d %= MINUTE;
         }
         if(d>0){
@@ -254,6 +258,11 @@ export default defineComponent({
       chrome.runtime.openOptionsPage()
     }
 
+    const onChangeDisableTime = () => {
+      sliderChecked.value = false;
+      sliderClicked();
+    }
+
     const sliderClicked = () => {
       const currentMode = sliderChecked.value
         ? AdGuardApiStatusEnum.enabled
@@ -295,6 +304,8 @@ export default defineComponent({
 
     return {
       defaultDisableTime,
+      disablePeriodSelect,
+      onChangeDisableTime,
       defaultDisableTimeDisabled,
       protectionDisabledDuration,
       beautifyDisabledDuration,
