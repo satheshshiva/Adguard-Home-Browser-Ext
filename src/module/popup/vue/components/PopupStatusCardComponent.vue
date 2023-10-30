@@ -1,16 +1,15 @@
 <template>
-  <v-card>
-    <v-card-title class="justify-space-between">
-      {{ translate(I18NPopupKeys.popup_status_card_title) }}
-      <v-icon
-        right
-        :title="translate(I18NOptionKeys.options_settings)"
-        @click="openOptions"
-        >{{ mdiCog }}
-      </v-icon>
-    </v-card-title>
-    <v-card-text>
-      <div class="d-flex flex justify-center">
+    <v-container fluid class="">
+      <div class="d-flex justify-space-between">
+        {{ translate(I18NPopupKeys.popup_status_card_title) }}
+        <v-icon
+          right
+          :title="translate(I18NOptionKeys.options_settings)"
+          @click="openOptions"
+          >{{ mdiCog }}
+        </v-icon>
+      </div>
+      <div class="d-flex flex justify-center mt-5">
         <v-switch
           v-model="sliderChecked"
           style="transform: scale(1.5)"
@@ -50,9 +49,7 @@
         item-value="value"
         @input="onChangeDisableTime()"
       ></v-select>
-
-    </v-card-text>
-  </v-card>
+    </v-container>
 </template>
 <script lang="ts">
 import { mdiAllInclusive, mdiCog, mdiTimerOutline } from '@mdi/js'

@@ -1,6 +1,5 @@
 <template>
   <v-app id="popup" >
-    <v-container fluid  >
       <PopupStatusCardComponent
         v-if="isActiveByBadgeLoaded"
         v-model="isActiveByRealStatus"
@@ -8,7 +7,6 @@
         class=""
       />
       <PopupUpdateAlertComponent v-if="!isActiveByRealStatus" />
-    </v-container>
   </v-app>
 </template>
 
@@ -67,5 +65,6 @@ export default defineComponent({
 <style lang="scss">
 #popup {
   width: 300px;
+  height: 350px;
 }
 </style>
