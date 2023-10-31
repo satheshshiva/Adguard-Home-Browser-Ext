@@ -5,6 +5,8 @@
 ## AdGuard Home Control
 This extension controls the protection of [AdGuard Home](https://github.com/AdguardTeam/AdGuardHome) right from your browser.
 
+<img src="docs/assets/firefox-ext.svg" width="150"/>
+
 ## Features:
 ✓ Disable protection for specific time  
 ✓ Supports multiple instances  
