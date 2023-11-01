@@ -9,6 +9,7 @@ module.exports = {
     },
     plugins: [
         '@typescript-eslint',
+      "import"
     ],
     extends: [
         'airbnb-typescript/base',
