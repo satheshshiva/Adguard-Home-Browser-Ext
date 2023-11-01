@@ -1,5 +1,4 @@
 import { Initializer } from '../../general/Initializer'
-import { LinkConfig } from '../../../service/i18NService'
 import {
   AdGuardSettingsDefaults,
   StorageService
@@ -27,7 +26,5 @@ export default class ChromeRuntimeInitializer implements Initializer {
       }
     })
 
-    // Hook to show a survey after uninstalling the extension
-    chrome.runtime.setUninstallURL(LinkConfig.uninstall_survey)
   }
 }
