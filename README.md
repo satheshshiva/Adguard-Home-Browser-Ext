@@ -17,11 +17,12 @@ Follow these instructions to build and run the project.
 
 1. Clone this repository.
 1. You need to have the latest version of npm.
-1. Install cross-env, `npm install cross-env`
-1. Run `npm run start-firefox` from the project folder
+1. Install cross-env, `npm install -g cross-env`
+1. Run `npm run start-firefox` or `make firefox` from the project folder
 1. In firefox browser, go to `about:debugging` -> `Load Temporary Add-on`
 1. Point to the `dist` -> `firefox` -> `mainifest.json`
 1. This extension should now be visible in the  Extension in toolbar.
+1. To make a distributable version, then run `make` command
 
 ## Screenshots
 <div style="text-align:center">
