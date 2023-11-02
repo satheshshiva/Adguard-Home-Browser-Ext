@@ -24,10 +24,12 @@
 		"open_in_tab": true
 	},
 	"background": {
-		"persistent": true,
-		"page": "background.html"
+		"page": "background.html",
+		"persistent": false
 	},
+
 	"permissions": [
+		"alarms",
 		"storage",
 		"<all_urls>",
 		"activeTab",
