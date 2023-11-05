@@ -2,6 +2,7 @@ import { AdGuardApiStatus } from '../api/models/AdGuardApiStatus'
 import { AdGuardSettingsStorage, StorageService } from './StorageService'
 import { AdGuardVersion } from '../api/models/AdGuardVersion'
 import AdGuardApiStatusEnum from '../api/enum/AdGuardApiStatusEnum'
+import HttpService from "./HttpService";
 
 const statusEndpoint = 'control/status'
 const changeStatusEndpoint="control/protection"
@@ -52,7 +53,7 @@ export default class AdGuardApiService {
       const url = this.getAdGuardBaseUrl(adguard.adguard_uri_base, statusEndpoint)
 
       promiseArray.push(
-        AdGuardApiService.httpGet<AdGuardApiStatus>(url, true, adguard.username, adguard.password)
+        HttpService.get<AdGuardApiStatus>(url, true, adguard.username, adguard.password)
       )
     }
 
@@ -93,46 +94,7 @@ export default class AdGuardApiService {
     }
     const url = this.getAdGuardBaseUrl(adGuard.adguard_uri_base, statusEndpoint)
 
-    //return axios.get<AdGuardVersion>(url.href, this.getAxiosConfig(adGuard.username, adGuard.password))
-    return AdGuardApiService.httpGet<AdGuardVersion>(url, true, adGuard.username, adGuard.password);
-  }
-
-  private static httpGet<T>( url:URL, jsonResponse:boolean,u:string, p:string ):Promise<T>{
-    return new Promise<T>((resolve,reject) => {
-      fetch(url.href, AdGuardApiService.httHeadersGet(u, p)).then(async (r) => {
-        let str = await new Response(r.body).text();
-        str = str?str.trim():str;
-        if(!jsonResponse){
-          resolve(<T>str);
-        }
-        try{
-          let b = JSON.parse(str);
-          resolve(<T>b);
-        }catch{
-          reject(<T>str);
-        } }).catch(e => {
-          reject(e);
-      });
-    });
-  }
-
-  private static httpPost<T>( url:URL, body:string, jsonResponse:boolean,u:string, p:string ):Promise<T>{
-    return new Promise<T>((resolve,reject) => {
-      fetch(url.href, AdGuardApiService.httHeadersPost(body, u, p)).then(async (r) => {
-        let str = await new Response(r.body).text();
-        str = str?str.trim():str;
-        if(!jsonResponse){
-          resolve(<T>str);
-        }
-        try{
-          let b = JSON.parse(str);
-          resolve(<T>b);
-        }catch{
-          reject(<T>str);
-        } }).catch(e => {
-        reject(e);
-      });
-    });
+    return HttpService.get<AdGuardVersion>(url, true, adGuard.username, adGuard.password);
   }
 
   /**
@@ -177,32 +139,11 @@ export default class AdGuardApiService {
       }
 
       promiseArray.push(
-          AdGuardApiService.httpPost<string>(url, JSON.stringify(data), false, adguard.username, adguard.password)
+          HttpService.post<string>(url, JSON.stringify(data), false, adguard.username, adguard.password)
             )
     }
 
     return Promise.all(promiseArray)
-  }
-
-  private static httHeadersGet(u:string, p:string)   {
-    return {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": 'Basic ' + btoa(`${u}:${p}`),
-      }
-    }
-  }
-
-  private static httHeadersPost(body:string, u:string, p:string)   {
-    return {
-      method: 'POST',
-      body: body,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Basic ' + btoa(`${u}:${p}`),
-      },
-    }
   }
 
   private static getAdGuardBaseUrl(domain: string, endpoint?: string): URL {

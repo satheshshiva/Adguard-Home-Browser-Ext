@@ -7,7 +7,6 @@ export default class CheckStatusInitializer implements Initializer {
   private readonly INTERVAL_TIMEOUT = 0.3;
 
   public init(): void {
-    console.log(("CheckStatusInitializer::init() called"));
     this.checkStatus().then();
     chrome.alarms.create("BadgeTextStatusChecker", {  periodInMinutes: this.INTERVAL_TIMEOUT });
 
@@ -24,7 +23,6 @@ export default class CheckStatusInitializer implements Initializer {
    * Checking the current status of the AdGuard instance(s)
    */
   private async checkStatus(): Promise<void> {
-    console.log(("CheckStatusInitializer::checkStatus() called"))
     AdGuardApiService.getAdGuardStatusCombined().then(value => {
       BadgeService.getBadgeText().then(result => {
         if (!BadgeService.compareBadgeTextToApiStatusEnum(result, value)) {
@@ -32,6 +30,8 @@ export default class CheckStatusInitializer implements Initializer {
             BadgeService.setBadgeText(ExtensionBadgeTextEnum.disabled)
           } else if (value === AdGuardApiStatusEnum.enabled) {
             BadgeService.setBadgeText(ExtensionBadgeTextEnum.enabled)
+          }else if (value === AdGuardApiStatusEnum.error) {
+            BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
           }
         }
       })
