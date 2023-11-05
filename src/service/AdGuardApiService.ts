@@ -1,13 +1,9 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { AdGuardApiStatus } from '../api/models/AdGuardApiStatus'
 import { AdGuardSettingsStorage, StorageService } from './StorageService'
-import { AdGuardListStatus } from '../api/models/AdGuardListStatus'
 import { AdGuardVersion } from '../api/models/AdGuardVersion'
-import ApiListMode from '../api/enum/ApiListMode'
-import ApiList from '../api/enum/ApiList'
 import AdGuardApiStatusEnum from '../api/enum/AdGuardApiStatusEnum'
 
-const statusEndpoint="control/status"
+const statusEndpoint = 'control/status'
 const changeStatusEndpoint="control/protection"
 
 export default class AdGuardApiService {
@@ -19,7 +15,7 @@ export default class AdGuardApiService {
       this.getAdGuardStatus()
         .then(results => {
           for (const result of results) {
-            if(!result.data.protection_enabled) {
+            if(!result.protection_enabled) {
             // If any AdGuard instance is offline or has an error we use its status
               resolve(AdGuardApiStatusEnum.disabled)
             }
@@ -36,15 +32,13 @@ export default class AdGuardApiService {
   /**
    * Get AdGuard server status
    */
-  public static async getAdGuardStatus(): Promise<
-    AxiosResponse<AdGuardApiStatus>[]
-  > {
+  public static async getAdGuardStatus(): Promise<AdGuardApiStatus[]> {
     const adGuardSettingsArray = await StorageService.getAdGuardSettingsArray()
     if (typeof adGuardSettingsArray === 'undefined') {
       return Promise.reject('AdGuardSettings empty')
     }
 
-    const promiseArray = new Array<Promise<AxiosResponse<AdGuardApiStatus>>>()
+    const promiseArray = new Array<Promise<AdGuardApiStatus>>()
 
     for (const adguard of adGuardSettingsArray) {
       if (
@@ -58,7 +52,7 @@ export default class AdGuardApiService {
       const url = this.getAdGuardBaseUrl(adguard.adguard_uri_base, statusEndpoint)
 
       promiseArray.push(
-        axios.get<AdGuardApiStatus>(url.href, this.getAxiosConfig(adguard.username, adguard.password))
+        AdGuardApiService.httpGet<AdGuardApiStatus>(url, true, adguard.username, adguard.password)
       )
     }
 
@@ -68,20 +62,19 @@ export default class AdGuardApiService {
   /**
    * Get AdGuard Server versions of all instances
    */
-  public static async getAdGuardVersions(): Promise<
-    AxiosResponse<AdGuardVersion>[]
-  > {
+  public static async getAdGuardVersions(): Promise<AdGuardVersion[]>
+  {
     const adGuardSettingsArray = await StorageService.getAdGuardSettingsArray()
     if (typeof adGuardSettingsArray === 'undefined') {
-      return Promise.reject('AdGuardSettings empty')
+       return Promise.reject("AdGuard settings empty");
     }
-    const promiseArray = new Array<Promise<AxiosResponse<AdGuardVersion>>>()
+    const adGuardVersionArr = new Array<AdGuardVersion>()
 
     for (const instance of adGuardSettingsArray) {
-      promiseArray.push(this.getAdGuardVersion(instance))
+      adGuardVersionArr.push(await this.getAdGuardVersion(instance))
     }
 
-    return Promise.all(promiseArray)
+    return Promise.all(adGuardVersionArr);
   }
 
   /**
@@ -90,7 +83,7 @@ export default class AdGuardApiService {
    */
   public static async getAdGuardVersion(
     adGuard: AdGuardSettingsStorage
-  ): Promise<AxiosResponse<AdGuardVersion>> {
+  ): Promise<AdGuardVersion>{
     if (
       typeof adGuard.adguard_uri_base === 'undefined' ||
       typeof adGuard.username === 'undefined' ||
@@ -100,7 +93,46 @@ export default class AdGuardApiService {
     }
     const url = this.getAdGuardBaseUrl(adGuard.adguard_uri_base, statusEndpoint)
 
-    return axios.get<AdGuardVersion>(url.href, this.getAxiosConfig(adGuard.username, adGuard.password))
+    //return axios.get<AdGuardVersion>(url.href, this.getAxiosConfig(adGuard.username, adGuard.password))
+    return AdGuardApiService.httpGet<AdGuardVersion>(url, true, adGuard.username, adGuard.password);
+  }
+
+  private static httpGet<T>( url:URL, jsonResponse:boolean,u:string, p:string ):Promise<T>{
+    return new Promise<T>((resolve,reject) => {
+      fetch(url.href, AdGuardApiService.httHeadersGet(u, p)).then(async (r) => {
+        let str = await new Response(r.body).text();
+        str = str?str.trim():str;
+        if(!jsonResponse){
+          resolve(<T>str);
+        }
+        try{
+          let b = JSON.parse(str);
+          resolve(<T>b);
+        }catch{
+          reject(<T>str);
+        } }).catch(e => {
+          reject(e);
+      });
+    });
+  }
+
+  private static httpPost<T>( url:URL, body:string, jsonResponse:boolean,u:string, p:string ):Promise<T>{
+    return new Promise<T>((resolve,reject) => {
+      fetch(url.href, AdGuardApiService.httHeadersPost(body, u, p)).then(async (r) => {
+        let str = await new Response(r.body).text();
+        str = str?str.trim():str;
+        if(!jsonResponse){
+          resolve(<T>str);
+        }
+        try{
+          let b = JSON.parse(str);
+          resolve(<T>b);
+        }catch{
+          reject(<T>str);
+        } }).catch(e => {
+        reject(e);
+      });
+    });
   }
 
   /**
@@ -111,7 +143,7 @@ export default class AdGuardApiService {
   public static async changeAdGuardStatus(
     mode: AdGuardApiStatusEnum,
     time: number
-  ): Promise<AxiosResponse<string>[]> {
+  ): Promise<string[]> {
 
     const adGuardSettingsArray = await StorageService.getAdGuardSettingsArray()
     if (typeof adGuardSettingsArray === 'undefined') {
@@ -122,7 +154,7 @@ export default class AdGuardApiService {
       return Promise.reject(`Disable time smaller than allowed:${time}`)
     }
 
-    const promiseArray = new Array<Promise<AxiosResponse<string>>>()
+    const promiseArray = new Array<Promise<string>>()
 
     for (const adguard of adGuardSettingsArray) {
       if (
@@ -145,110 +177,31 @@ export default class AdGuardApiService {
       }
 
       promiseArray.push(
-            axios.post(url.href, data, this.getAxiosConfigStr(adguard.username, adguard.password))
+          AdGuardApiService.httpPost<string>(url, JSON.stringify(data), false, adguard.username, adguard.password)
             )
     }
 
     return Promise.all(promiseArray)
   }
 
-  public static async addDomainToList(
-    list: ApiList,
-    domain: string
-  ): Promise<AxiosResponse<AdGuardListStatus>[]> {
-    return this.changeDomainOnList(list, ApiListMode.add, domain)
-  }
-
-  public static async subDomainFromList(
-    list: ApiList,
-    domain: string
-  ): Promise<AxiosResponse<AdGuardListStatus>[]> {
-    return this.changeDomainOnList(list, ApiListMode.sub, domain)
-  }
-
-  private static async changeDomainOnList(
-    list: ApiList,
-    mode: ApiListMode,
-    domain: string
-  ): Promise<AxiosResponse<AdGuardListStatus>[]> {
-    const adGuardSettingsArray = await StorageService.getAdGuardSettingsArray()
-
-    if (typeof adGuardSettingsArray === 'undefined') {
-      return Promise.reject('AdGuardSettings empty')
-    }
-
-    if (domain.length < 1) {
-      return Promise.reject("Domain can't be empty")
-    }
-
-    const promiseArray = new Array<Promise<AxiosResponse<AdGuardListStatus>>>()
-
-    for (const adguard of adGuardSettingsArray) {
-      if (
-        typeof adguard.adguard_uri_base === 'undefined' ||
-        typeof adguard.username === 'undefined' ||
-        typeof adguard.password === 'undefined'
-      ) {
-        return Promise.reject('Some AdGuardSettings are undefined.')
-      }
-      const url = this.getAdGuardBaseUrl(adguard.adguard_uri_base, adguard.password)
-      url.searchParams.append('list', list)
-      url.searchParams.append(mode, domain)
-      promiseArray.push(
-        axios.get<AdGuardListStatus>(url.href, this.getAxiosConfig(adguard.username, adguard.password))
-      )
-    }
-
-    return Promise.all(promiseArray)
-  }
-
-  private static getAxiosConfig(u:string, p:string): AxiosRequestConfig {
+  private static httHeadersGet(u:string, p:string)   {
     return {
-      transformResponse: [
-        (data) => {
-          // console.log(`Server response: ${data}`)
-          let resp;
-          if(!data || data===""){
-            throw Error(`Empty response from server`);
-          }
-          try {
-            resp = JSON.parse(data);
-          } catch (error) {
-            if(data.trim()==="Forbidden"){
-              throw Error(`Forbidden: Please check the credentials.`)
-            }
-            throw Error(`Unexpected error: ${error}:${data}`
-            );
-          }
-          return resp
-        },
-      ],
-      auth: {
-        username: u,
-        password: p
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'Basic ' + btoa(`${u}:${p}`),
       }
     }
   }
 
-  private static getAxiosConfigStr(u:string, p:string): AxiosRequestConfig {
+  private static httHeadersPost(body:string, u:string, p:string)   {
     return {
-      transformResponse: [
-        (data) => {
-          if(!data || data===""){
-            throw Error(`Empty response from server`);
-          }
-          if(data.trim()==="Forbidden"){
-            throw Error(`Forbidden: Please check the credentials.`)
-          }
-          // console.log(`Server response: ${data}`)
-          return data?data.trim():data
-        }
-      ],
-
-      auth: {
-        username: u,
-        password: p
-      }
+      method: 'POST',
+      body: body,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Basic ' + btoa(`${u}:${p}`),
+      },
     }
   }
 
@@ -263,7 +216,7 @@ export default class AdGuardApiService {
     } else {
       correctEndpoint = endpoint
     }
-
     return new URL(correctEndpoint, domainPrepared)
   }
+
 }

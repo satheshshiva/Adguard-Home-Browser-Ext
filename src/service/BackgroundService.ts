@@ -25,8 +25,8 @@ export default class BackgroundService {
         AdGuardApiService.changeAdGuardStatus(newStatus, disableTime)
           .then(data => {
             for (const changeStatusResponse of data) {
-              if (changeStatusResponse.data !== "OK") {
-                console.warn(`One AdGuard instance returned Error from its request. Error: ${changeStatusResponse.data}`)
+              if (changeStatusResponse !== "OK") {
+                console.warn(`One AdGuard instance returned Error from its request. Error: ${changeStatusResponse}`)
                 BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
                 return
               }
