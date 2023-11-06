@@ -1,29 +1,28 @@
+import { I18NOptionKeys, I18NService } from "./i18NService"
+
 export default class HttpService {
 
   public static get<T>( url:URL, jsonResponse:boolean,u:string, p:string ):Promise<T>{
     return new Promise<T>((resolve,reject) => {
-      fetch(url.href, HttpService.httHeadersGet(u, p)).then(async (r) => {
-        let str = await new Response(r.body).text();
-        str = str?str.trim():str;
-        if(!jsonResponse){
-          resolve(<T>str);
-        }
-        try{
-          let b = JSON.parse(str);
-          resolve(<T>b);
-        }catch{
-          reject(<T>str);
-        } }).catch(e => {
-        reject(e);
-      });
+      fetch(url.href, HttpService.httpHeadersGet(u, p))
+        .then( (r) => HttpService.processResponse(resolve, reject, r, jsonResponse))
+        .catch(e => reject(e));
     });
   }
 
   public static post<T>( url:URL, body:string, jsonResponse:boolean,u:string, p:string ):Promise<T>{
     return new Promise<T>((resolve,reject) => {
-      fetch(url.href, HttpService.httHeadersPost(body, u, p)).then(async (r) => {
-        let str = await new Response(r.body).text();
-        str = str?str.trim():str;
+      fetch(url.href, HttpService.httpHeadersPost(body, u, p))
+        .then( (r) => HttpService.processResponse(resolve, reject, r, jsonResponse))
+        .catch(e => reject(e));
+    });
+  }
+
+  private static async processResponse<T>(resolve: any, reject:any, r: Response, jsonResponse: boolean){
+    let str = await new Response(r.body).text();
+    str = str?str.trim():str;
+    switch (r.status) {
+      case 200:case 201:
         if(!jsonResponse){
           resolve(<T>str);
         }
@@ -32,14 +31,18 @@ export default class HttpService {
           resolve(<T>b);
         }catch{
           reject(<T>str);
-        } }).catch(e => {
-        reject(e);
-      });
-    });
+        }
+        break;
+      case 403:
+        reject(I18NService.translate(I18NOptionKeys.options_invalid_credentials))
+        break;
+      default:
+        reject(`HTTP Status: ${r.status}: ${<T>str}`);
+    }
+
   }
 
-
-  private static httHeadersGet(u:string, p:string)   {
+  private static httpHeadersGet(u:string, p:string)   {
     return {
       method: "GET",
       headers: {
@@ -50,7 +53,7 @@ export default class HttpService {
     }
   }
 
-  private static httHeadersPost(body:string, u:string, p:string)   {
+  private static httpHeadersPost(body:string, u:string, p:string)   {
     return {
       method: 'POST',
       body: body,
