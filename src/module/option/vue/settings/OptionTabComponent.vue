@@ -141,13 +141,13 @@ export default defineComponent({
       connectionCheckStatus.value = ConnectionCheckStatus.IDLE
       AdGuardApiService.getAdGuardVersion(currentSelectedSettings.value)
         .then(result => {
-          if (typeof result.data === 'object') {
+          if (typeof result === 'object') {
             connectionCheckStatus.value = ConnectionCheckStatus.OK
-            connectionCheckData.value = result.data
+            connectionCheckData.value = result
             errorMsg=""
           } else {
             connectionCheckStatus.value = ConnectionCheckStatus.ERROR
-            errorMsg=`Unexpected response from server: ${result.data}`
+            errorMsg=`Unexpected response from server: ${result}`
           }
         })
         .catch((e) => {

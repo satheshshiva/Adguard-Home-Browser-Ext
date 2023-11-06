@@ -15,24 +15,26 @@ export class BadgeService {
    * Sets the badge text.
    */
   public static setBadgeText(text: ExtensionBadgeTextEnum | string): void {
+    let action = chrome.action?chrome.action:chrome.browserAction;
     // Firefox needs white text color.
-    if (typeof browser !== 'undefined') {
+    if (typeof browser !== 'undefined' && browser.browserAction) {
       browser.browserAction.setBadgeTextColor({ color: 'white' }).then()
     }
 
-    chrome.browserAction.setBadgeBackgroundColor({
+    action.setBadgeBackgroundColor({
       color: this.getColorForBadgeTextEnum(text)
     })
 
-    chrome.browserAction.setBadgeText({ text })
+    action.setBadgeText({ text })
   }
 
   /**
    * Returns the badge text as enum value.
    */
   public static getBadgeText(): Promise<ExtensionBadgeTextEnum> {
+    let action = chrome.action?chrome.action:chrome.browserAction;
     return new Promise(resolve => {
-      chrome.browserAction.getBadgeText({}, (result: string) => {
+      action.getBadgeText({}, (result: string) => {
         resolve(this.convertStringToBadgeTextEnum(result))
       })
     })

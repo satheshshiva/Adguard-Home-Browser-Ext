@@ -186,8 +186,8 @@ export default defineComponent({
       AdGuardApiService.getAdGuardStatus().then(status => {
         if (status?.length > 0) {
           // here am hardcoding to get the status of only the first instance.
-          if (status[0].data.protection_disabled_duration > 0) {
-            protectionDisabledDuration.value = status[0].data.protection_disabled_duration
+          if (status[0].protection_disabled_duration > 0) {
+            protectionDisabledDuration.value = status[0].protection_disabled_duration
             showTimerDisabledDuration()
             return
           }
@@ -275,9 +275,9 @@ export default defineComponent({
         AdGuardApiService.changeAdGuardStatus(currentMode, time)
           .then(value => {
             for (const adGuardStatus of value) {
-              if (adGuardStatus.data !== 'OK') {
+              if (adGuardStatus !== 'OK') {
                 throwConsoleBadgeError(
-                  `Change status failed in one or more adGuard instance(s): Error:${adGuardStatus.data}`,
+                  `Change status failed in one or more adGuard instance(s): Error:${adGuardStatus}`,
                   true
                 )
                 return

@@ -7,7 +7,6 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from '@vue/composition-api'
 import { StorageService } from '../../../../service/StorageService'
-import AdGuardApiService from '../../../../service/AdGuardApiService'
 import useTranslation from '../../../../hooks/translation'
 
 export default defineComponent({
@@ -25,10 +24,7 @@ export default defineComponent({
         return
       }
 
-      updatesAvailable.value =
-        (await AdGuardApiService.getAdGuardVersions()).filter(
-          ({ data }) => data.version
-        ).length > 0
+      updatesAvailable.value =false;
     }
 
     onMounted(() => checkForUpdates)

@@ -90,6 +90,9 @@
 	"options_url_invalid_warning": {
 		"message": "The url is invalid. (Missing http(s), invalid scheme or empty)"
 	},
+	"options_invalid_credentials": {
+		"message": "Unauthorized: Please check credentials."
+	},
 	"option_disable_update_notification": {
 		"message": "Disable update notification in the popup"
 	},

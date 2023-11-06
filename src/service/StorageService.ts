@@ -6,7 +6,7 @@ export interface AdGuardSettingsStorage {
 
 export enum AdGuardSettingsDefaults {
   adguard_uri_base = 'http://adguard/',
-  default_disable_time = 10000
+  default_disable_time = 30000
 }
 
 export interface ExtensionStorage {

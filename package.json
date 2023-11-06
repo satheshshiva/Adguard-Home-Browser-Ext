@@ -1,9 +1,8 @@
 {
 	"name": "adguard-browser-extension",
-	"version": "1.0",
+	"version": "1.0.1",
 	"dependencies": {
 		"@vue/composition-api": "^1.7.2",
-		"axios": "^1.6.0",
 		"vue": "^2.6.14",
 		"vue-debounce": "^3.0.1",
 		"vue-router": "^3.5.3",
