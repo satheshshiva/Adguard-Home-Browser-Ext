@@ -1,5 +1,3 @@
-import { I18NOptionKeys, I18NService } from "./i18NService"
-
 export default class HttpService {
 
   public static get<T>( url:URL, jsonResponse:boolean,u:string, p:string ):Promise<T>{
@@ -34,7 +32,7 @@ export default class HttpService {
         }
         break;
       case 403:
-        reject(I18NService.translate(I18NOptionKeys.options_invalid_credentials))
+        reject("Unauthorized: Please check credentials.")
         break;
       default:
         reject(`HTTP Status: ${r.status}: ${<T>str}`);
