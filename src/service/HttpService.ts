@@ -43,6 +43,7 @@ export default class HttpService {
     return {
       method: "GET",
       headers: {
+        "mode": "cors",
         "Content-Type": "application/json",
         "Authorization": 'Basic ' + btoa(`${u}:${p}`),
       }
@@ -54,6 +55,7 @@ export default class HttpService {
       method: 'POST',
       body: body,
       headers: {
+        "mode": "cors",
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + btoa(`${u}:${p}`),
       },
