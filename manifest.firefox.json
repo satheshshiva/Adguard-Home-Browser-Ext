@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "AdGuard Home Control",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"author": "Sathesh Sivashanmugam",
 	"description": "__MSG_manifest_description__",
 	"default_locale": "en",
@@ -32,8 +32,7 @@
 		"alarms",
 		"storage",
 		"<all_urls>",
-		"activeTab",
-		"contextMenus"
+		"activeTab"
 	],
 	"commands": {
 		
