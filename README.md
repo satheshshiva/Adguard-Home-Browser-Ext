@@ -7,7 +7,7 @@ This extension controls the protection of [AdGuard Home](https://github.com/Adgu
 
 <a href="https://addons.mozilla.org/en-US/firefox/addon/adguard-home-browser-extension/"><img  src="docs/assets/firefox-ext.svg" width="150"/></a>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="https://chromewebstore.google.com/detail/adguard-home-control/flbpjbdbniigclhibiemmeopcnfimajj/"><img  src="docs/assets/chrome_webstore_badge.png" width="150"/></a>
+<a href="https://chromewebstore.google.com/detail/adguard-home-control/flbpjbdbniigclhibiemmeopcnfimajj"><img  src="docs/assets/chrome_webstore_badge.png" width="150"/></a>
 
 ## Features:
 ✓ Disable protection for specific time  
