@@ -3,7 +3,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import ZipPlugin from 'zip-webpack-plugin'
 import * as path from 'path'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
-import VueLoaderPlugin from 'vue-loader/lib/plugin'
+import { VueLoaderPlugin } from 'vue-loader'
 import ESLintWebpackPlugin from 'eslint-webpack-plugin'
 
 export class WebpackConfigFactory {
