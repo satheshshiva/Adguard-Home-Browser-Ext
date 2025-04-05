@@ -10,7 +10,7 @@ import {
   PropType,
   ref,
   watch
-} from '@vue/composition-api'
+} from 'vue'
 import useTranslation from '../../../../hooks/translation'
 import { I18NOptionKeys } from '../../../../service/i18NService'
 

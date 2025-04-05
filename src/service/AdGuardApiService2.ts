@@ -15,22 +15,27 @@ export default class AdGuardApiService2 {
    * Get AdGuard server status of all the instances
    */
   public static async getAdGuardStatusCombined(): Promise<AdGuardApiStatusEnum> {
-    return new Promise<AdGuardApiStatusEnum>(resolve => {
-      this.getAdGuardStatus()
-        .then(results => {
-          for (const result of results) {
-            if(!result.protection_enabled) {
-            // If any AdGuard instance is offline or has an error we use its status
-              resolve(AdGuardApiStatusEnum.disabled)
-            }
-            resolve(AdGuardApiStatusEnum.enabled)
-          }
-        })
-        .catch(reason => {
-          console.warn(reason)
-          resolve(AdGuardApiStatusEnum.error)
-        })
-    })
+    try {
+      const results = await this.getAdGuardStatus()
+      
+      // If no results, return error
+      if (!results || results.length === 0) {
+        return AdGuardApiStatusEnum.error
+      }
+
+      // Check if any instance is disabled
+      for (const result of results) {
+        if (!result.protection_enabled) {
+          return AdGuardApiStatusEnum.disabled
+        }
+      }
+
+      // All instances are enabled
+      return AdGuardApiStatusEnum.enabled
+    } catch (error) {
+      console.warn('Error checking AdGuard status:', error)
+      return AdGuardApiStatusEnum.error
+    }
   }
 
    /**
@@ -76,7 +81,4 @@ export default class AdGuardApiService2 {
     }
     return new URL(correctEndpoint, domainPrepared)
   }
-
-
-
 }

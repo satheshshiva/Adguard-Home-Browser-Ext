@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from '@vue/composition-api'
+import { defineComponent, onMounted, ref, watch } from 'vue'
 import {
   AdGuardSettingsDefaults,
   StorageService
@@ -46,12 +46,14 @@ export default defineComponent({
 
     onMounted(() => updateDisableTime())
 
-    return { translate, I18NOptionKeys, disableTime, console, disablePeriodSelect}
-  },
-  computed: {
-    I18NPopupKeys() {
-      return I18NPopupKeys
+    return { 
+      translate, 
+      I18NOptionKeys, 
+      disableTime, 
+      console, 
+      disablePeriodSelect,
+      I18NPopupKeys
     }
-  },
+  }
 })
 </script>

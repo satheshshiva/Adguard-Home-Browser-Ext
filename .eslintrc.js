@@ -9,11 +9,11 @@ module.exports = {
     },
     plugins: [
         '@typescript-eslint',
-      "import"
+        "import"
     ],
     extends: [
         'airbnb-typescript/base',
-        'plugin:vue/recommended',
+        'plugin:vue/vue3-recommended',
         'prettier'
     ],
     "rules": {

@@ -32,37 +32,69 @@ export class WebpackConfigFactory {
         rules: [
           {
             test: /\.vue$/,
-            loader: 'vue-loader'
+            loader: 'vue-loader',
+            options: {
+              compilerOptions: {
+                isCustomElement: (tag: string): boolean => tag.startsWith('v-')
+              }
+            }
           },
           {
             test: /\.tsx?$/,
             loader: 'ts-loader',
             exclude: /node_modules/,
             options: {
-              appendTsSuffixTo: [/\.vue$/]
+              appendTsSuffixTo: [/\.vue$/],
+              transpileOnly: true,
+              compilerOptions: {
+                module: 'esnext',
+                target: 'esnext',
+                jsx: 'preserve'
+              }
             }
           },
           {
-            test: /\.(scss|css)$/,
+            test: /\.css$/,
+            use: ['style-loader', 'css-loader']
+          },
+          {
+            test: /\.s[ac]ss$/i,
             use: ['style-loader', 'css-loader', 'sass-loader']
           },
           {
             test: /\.(woff|woff2|ttf|eot)$/,
-            use: {
-              loader: 'url-loader'
-            }
+            type: 'asset/resource'
           }
         ]
       },
       resolve: {
-        extensions: ['.js', '.ts', '.vue'],
+        extensions: ['.ts', '.tsx', '.js', '.vue', '.json'],
         alias: {
-          vue$: 'vue/dist/vue.esm.js'
+          vue: '@vue/runtime-dom',
+          '@': path.resolve(__dirname, '../')
         }
       },
       optimization: {
         splitChunks: {
-          chunks: 'all'
+          chunks: 'all',
+          minSize: 20000,
+          minRemainingSize: 0,
+          minChunks: 1,
+          maxAsyncRequests: 30,
+          maxInitialRequests: 30,
+          enforceSizeThreshold: 50000,
+          cacheGroups: {
+            defaultVendors: {
+              test: /[\\/]node_modules[\\/]/,
+              priority: -10,
+              reuseExistingChunk: true
+            },
+            default: {
+              minChunks: 2,
+              priority: -20,
+              reuseExistingChunk: true
+            }
+          }
         }
       },
       plugins: [
@@ -109,17 +141,20 @@ export class WebpackConfigFactory {
         }),
         new VueLoaderPlugin(),
         new ESLintWebpackPlugin({
-          extensions: ['ts', 'vue']
+          extensions: ['ts', 'vue'],
+          failOnError: isProduction,
+          failOnWarning: isProduction
         })
       ]
     }
 
     if (isProduction) {
       if (config.plugins) {
-        const zip_options: ZipPlugin.Options = {
+        const zip_options = {
           filename: 'package.' + browser + '.zip',
           path: path.join(__dirname, '../../')
         }
+        // @ts-ignore - Ignore type mismatch between ZipPlugin and webpack types
         config.plugins.push(new ZipPlugin(zip_options))
       }
     }

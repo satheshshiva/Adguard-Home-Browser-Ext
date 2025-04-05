@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "@vue/composition-api";
+import { computed, defineComponent } from "vue";
 import useTranslation from '../../../../hooks/translation'
 import { I18NOptionKeys, LinkConfig } from "../../../../service/i18NService";
 
@@ -46,12 +46,8 @@ export default defineComponent({
       copyrightText,
       translate,
       I18NOptionKeys,
+      LinkConfig
     }
-  },
-  computed: {
-    LinkConfig() {
-      return LinkConfig
-    }
-  },
+  }
 })
 </script>

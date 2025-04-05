@@ -15,28 +15,61 @@ export class BadgeService {
    * Sets the badge text.
    */
   public static setBadgeText(text: ExtensionBadgeTextEnum | string): void {
-    let action = chrome.action?chrome.action:chrome.browserAction;
-    // Firefox needs white text color.
+    // Handle Firefox browser action
     if (typeof browser !== 'undefined' && browser.browserAction) {
-      browser.browserAction.setBadgeTextColor({ color: 'white' }).then()
+      browser.browserAction.setBadgeTextColor({ color: 'white' }).catch(console.error)
+      browser.browserAction.setBadgeBackgroundColor({
+        color: this.getColorForBadgeTextEnum(text)
+      }).catch(console.error)
+      browser.browserAction.setBadgeText({ text }).catch(console.error)
+      return
     }
 
-    action.setBadgeBackgroundColor({
-      color: this.getColorForBadgeTextEnum(text)
-    })
+    // Handle Chrome action
+    if (chrome.action) {
+      chrome.action.setBadgeBackgroundColor({
+        color: this.getColorForBadgeTextEnum(text)
+      })
+      chrome.action.setBadgeText({ text })
+      return
+    }
 
-    action.setBadgeText({ text })
+    // Fallback to browserAction for older Chrome versions
+    if (chrome.browserAction) {
+      chrome.browserAction.setBadgeBackgroundColor({
+        color: this.getColorForBadgeTextEnum(text)
+      })
+      chrome.browserAction.setBadgeText({ text })
+    }
   }
 
   /**
    * Returns the badge text as enum value.
    */
   public static getBadgeText(): Promise<ExtensionBadgeTextEnum> {
-    let action = chrome.action?chrome.action:chrome.browserAction;
     return new Promise(resolve => {
-      action.getBadgeText({}, (result: string) => {
-        resolve(this.convertStringToBadgeTextEnum(result))
-      })
+      // Handle Firefox browser action
+      if (typeof browser !== 'undefined' && browser.browserAction) {
+        browser.browserAction.getBadgeText({})
+          .then(result => resolve(this.convertStringToBadgeTextEnum(result)))
+          .catch(() => resolve(ExtensionBadgeTextEnum.error))
+        return
+      }
+
+      // Handle Chrome action
+      if (chrome.action) {
+        chrome.action.getBadgeText({}, (result: string) => {
+          resolve(this.convertStringToBadgeTextEnum(result))
+        })
+        return
+      }
+
+      // Fallback to browserAction for older Chrome versions
+      if (chrome.browserAction) {
+        chrome.browserAction.getBadgeText({}, (result: string) => {
+          resolve(this.convertStringToBadgeTextEnum(result))
+        })
+      }
     })
   }
 

@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@vue/composition-api'
+import { defineComponent, onMounted, ref } from 'vue'
 import { StorageService } from '../../../../service/StorageService'
 import useTranslation from '../../../../hooks/translation'
 

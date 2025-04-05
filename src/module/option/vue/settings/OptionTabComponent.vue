@@ -92,11 +92,12 @@ import {
   onMounted,
   ref,
   watch
-} from '@vue/composition-api'
+} from 'vue'
 import { mdiEyeOffOutline, mdiEyeOutline } from '@mdi/js'
 import {
   AdGuardSettingsStorage,
-  StorageService
+  StorageService,
+  AdGuardSettingsDefaults
 } from '../../../../service/StorageService'
 import { AdGuardVersion } from '../../../../api/models/AdGuardVersion'
 import AdGuardApiService from '../../../../service/AdGuardApiService'
@@ -115,7 +116,11 @@ enum PasswordInputType {
 
 export default defineComponent({
   name: 'OptionTabComponent',
+  directives: {
+    debounce
+  },
   setup: () => {
+    const { translate, I18NOptionKeys } = useTranslation()
     const tabs = ref<AdGuardSettingsStorage[]>([
       {
         adguard_uri_base: '',
@@ -125,14 +130,9 @@ export default defineComponent({
     ])
 
     const currentTab = ref(0)
-
     const passwordInputType = ref<PasswordInputType>(PasswordInputType.password)
-
-    const connectionCheckStatus = ref<ConnectionCheckStatus>(
-      ConnectionCheckStatus.IDLE
-    )
-    let errorMsg:string="null"
-
+    const connectionCheckStatus = ref<ConnectionCheckStatus>(ConnectionCheckStatus.IDLE)
+    const errorMsg = ref<string>("null")
     const connectionCheckData = ref<AdGuardVersion | null>(null)
 
     const currentSelectedSettings = computed(() => tabs.value[currentTab.value])
@@ -144,18 +144,19 @@ export default defineComponent({
           if (typeof result === 'object') {
             connectionCheckStatus.value = ConnectionCheckStatus.OK
             connectionCheckData.value = result
-            errorMsg=""
+            errorMsg.value = ""
           } else {
             connectionCheckStatus.value = ConnectionCheckStatus.ERROR
-            errorMsg=`Unexpected response from server: ${result}`
+            errorMsg.value = `Unexpected response from server: ${result}`
           }
         })
         .catch((e) => {
-          errorMsg=`${e}`
-          console.warn(errorMsg)
+          errorMsg.value = `${e}`
+          console.warn(errorMsg.value)
           connectionCheckStatus.value = ConnectionCheckStatus.ERROR
         })
     }
+
     const resetConnectionCheckAndCheck = () => {
       connectionCheckStatus.value = ConnectionCheckStatus.IDLE
       connectionCheckData.value = null
@@ -207,7 +208,7 @@ export default defineComponent({
       { deep: true }
     )
 
-    const checkErrorMsg = () => errorMsg
+    const checkErrorMsg = () => errorMsg.value
 
     const connectionCheckVersionText = computed(() => {
       const data = connectionCheckData.value
@@ -251,10 +252,12 @@ export default defineComponent({
       addNewInstance,
       toggleApiKeyVisibility,
       connectionCheckVersionText,
-      connectionCheckStatus,
-      connectionCheckData,
       checkErrorMsg,
-      ...useTranslation()
+      connectionCheckStatus,
+      ConnectionCheckStatus,
+      translate,
+      I18NOptionKeys,
+      AdGuardSettingsDefaults
     }
   }
 })

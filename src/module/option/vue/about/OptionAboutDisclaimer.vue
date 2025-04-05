@@ -7,18 +7,13 @@
       <span style="font-size: 0.9em;">
         {{ translate(I18NOptionKeys.option_about_disclaimer_message) }}
         <br />
-
       </span>
     </v-card-text>
   </v-card>
 </template>
 
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+<script setup lang="ts">
 import useTranslation from '../../../../hooks/translation'
 
-export default defineComponent({
-  name: 'OptionAboutDisclaimer',
-  setup: () => ({ ...useTranslation() })
-})
+const { translate } = useTranslation()
 </script>

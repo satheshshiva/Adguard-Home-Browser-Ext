@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 import useTranslation from '../../../../hooks/translation'
 import OptionAboutReportIssue from '../about/OptionAboutReportIssue.vue'
 import OptionAboutExtension from '../about/OptionAboutExtension.vue'

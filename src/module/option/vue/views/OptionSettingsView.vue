@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from '@vue/composition-api'
+import { computed, defineComponent } from 'vue'
 import { I18NOptionKeys } from '../../../../service/i18NService'
 import { StorageService } from '../../../../service/StorageService'
 import MessageBusService from '../../../../service/MessageBusService'

@@ -60,7 +60,7 @@
 </template>
 <script lang="ts">
 import { mdiAllInclusive, mdiCog, mdiTimerOutline } from '@mdi/js'
-import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import {
   AdGuardSettingsDefaults,
   StorageService
@@ -76,7 +76,6 @@ import useTranslation from '../../../../hooks/translation'
 
 export default defineComponent({
   name: 'PopupStatusCardComponent',
-  model: { prop: 'isActiveByStatus', event: 'updateStatus' },
   props: {
     isActiveByStatus: {
       type: Boolean,
@@ -87,6 +86,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['update:isActiveByStatus'],
   setup: (props, { emit }) => {
     const sliderChecked = ref(props.isActiveByBadge)
     const sliderDisabled = ref(!props.isActiveByBadge)
@@ -126,19 +126,19 @@ export default defineComponent({
         sliderChecked.value = false
         sliderDisabled.value = false
         BadgeService.setBadgeText(ExtensionBadgeTextEnum.disabled)
-        emit('updateStatus', false)
+        emit('update:isActiveByStatus', false)
       } else if (currentStatus === AdGuardApiStatusEnum.enabled) {
         defaultDisableTimeDisabled.value = false
         sliderDisabled.value = false
         sliderChecked.value = true
         BadgeService.setBadgeText(ExtensionBadgeTextEnum.enabled)
-        emit('updateStatus', true)
+        emit('update:isActiveByStatus', true)
       } else {
         defaultDisableTimeDisabled.value = true
         sliderDisabled.value = true
         sliderChecked.value = false
         BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
-        emit('updateStatus', false)
+        emit('update:isActiveByStatus', false)
       }
     }
     const showTimerDisabledDuration = () => {
@@ -315,7 +315,6 @@ export default defineComponent({
       sliderChecked,
       sliderDisabled,
       timeUnitIcon,
-      //   getProtectionDisabledDuration,
       mdiCog,
       sliderClicked,
       openOptions,

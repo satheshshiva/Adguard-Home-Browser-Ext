@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "ES2018",
-		"sourceMap": false,
+		"sourceMap": true,
 		"lib": [
 			"dom",
 			"ESNext"
@@ -10,7 +10,10 @@
 		"outDir": "dist",
 		"types": [
 			"chrome",
-			"firefox-webext-browser"
+			"firefox-webext-browser",
+			"node",
+			"webpack",
+			"html-webpack-plugin"
 		],
 		"baseUrl": ".",
 		"module": "ESNext",
@@ -18,7 +21,14 @@
 		"esModuleInterop": true,
 		"experimentalDecorators": true,
 		"strict": true,
-		"allowSyntheticDefaultImports": true
+		"allowSyntheticDefaultImports": true,
+		"skipLibCheck": true,
+		"resolveJsonModule": true,
+		"allowJs": true,
+		"jsx": "preserve",
+		"paths": {
+			"@/*": ["src/*"]
+		}
 	},
 	"exclude": [
 		"node_modules",
