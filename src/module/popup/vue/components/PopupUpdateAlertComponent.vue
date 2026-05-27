@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@vue/composition-api'
+import { defineComponent, onMounted, ref } from 'vue'
 import { StorageService } from '../../../../service/StorageService'
 import useTranslation from '../../../../hooks/translation'
 
@@ -15,7 +15,8 @@ export default defineComponent({
     const updatesAvailable = ref(false)
 
     const checkForUpdates = async () => {
-      const isUpdateNotificationDisabled = await StorageService.getDisableUpdateNotification()
+      const isUpdateNotificationDisabled =
+        await StorageService.getDisableUpdateNotification()
 
       if (
         isUpdateNotificationDisabled === undefined ||
@@ -24,12 +25,12 @@ export default defineComponent({
         return
       }
 
-      updatesAvailable.value =false;
+      updatesAvailable.value = false
     }
 
     onMounted(() => checkForUpdates)
 
     return { updatesAvailable, ...useTranslation() }
-  }
+  },
 })
 </script>

@@ -1,73 +1,64 @@
 <template>
-    <v-container fluid class="pa-6">
-      <div class="d-flex justify-space-between">
-        <div class="d-flex justify-start align-center ">
+  <v-container fluid class="pa-6">
+    <div class="d-flex justify-space-between">
+      <div class="d-flex justify-start align-center">
         <v-avatar size="40">
           <v-img src="icon/icon-128.png" />
         </v-avatar>
-          <h2>
-        {{ translate(I18NPopupKeys.popup_status_card_title) }}
-          </h2>
-        </div>
-        <v-icon
-          right
-          :title="translate(I18NOptionKeys.options_settings)"
-          @click="openOptions"
-          >{{ mdiCog }}
-        </v-icon>
+        <h2>
+          {{ translate(I18NPopupKeys.popup_status_card_title) }}
+        </h2>
       </div>
-      <div class="d-flex flex justify-center mt-5">
-        <v-switch
-          v-model="sliderChecked"
-          style="transform: scale(1.5)"
-          inset
-          color="green"
-          :disabled="sliderDisabled"
-          @change="sliderClicked()"
-        ></v-switch>
-      </div>
-      <div class="d-flex flex justify-center">
-        <h4 v-if="!sliderDisabled && sliderChecked">
-          Protection is enabled
-        </h4>
-        <h4 v-if="!sliderDisabled && !sliderChecked">
-          Protection is disabled
-        </h4>
-      </div>
-      <div
-        v-if="protectionDisabledDuration > 0"
-        class="d-flex flex justify-center mt-2"
-      >
-        <h5>
-          Enabling protection in {{ beautifyDisabledDuration }}
-        </h5>
-      </div>
-      <v-divider
-        class="border-opacity-100 mt-5 mb-5"
-        color="primary"
-      ></v-divider>
+      <v-icon
+        class="ms-auto"
+        :title="translate(I18NOptionKeys.options_settings)"
+        @click="openOptions"
+        >{{ mdiCog }}
+      </v-icon>
+    </div>
+    <div class="d-flex flex justify-center mt-5">
+      <v-switch
+        v-model="sliderChecked"
+        style="transform: scale(1.5)"
+        inset
+        color="green"
+        :disabled="sliderDisabled"
+        @update:model-value="sliderClicked()"
+      ></v-switch>
+    </div>
+    <div class="d-flex flex justify-center">
+      <h4 v-if="!sliderDisabled && sliderChecked">Protection is enabled</h4>
+      <h4 v-if="!sliderDisabled && !sliderChecked">Protection is disabled</h4>
+    </div>
+    <div
+      v-if="protectionDisabledDuration > 0"
+      class="d-flex flex justify-center mt-2"
+    >
+      <h5>Enabling protection in {{ beautifyDisabledDuration }}</h5>
+    </div>
+    <v-divider class="border-opacity-100 mt-5 mb-5" color="primary"></v-divider>
 
-      <v-select
-        v-model="defaultDisableTime"
-        :label="translate(I18NPopupKeys.popup_status_card_select_text)"
-        :disabled="defaultDisableTimeDisabled"
-        :items="disablePeriodSelect"
-        item-text="title"
-        item-value="value"
-        @input="onChangeDisableTime()"
-      ></v-select>
-    </v-container>
+    <v-select
+      v-model="defaultDisableTime"
+      :label="translate(I18NPopupKeys.popup_status_card_select_text)"
+      :disabled="defaultDisableTimeDisabled"
+      :items="disablePeriodSelect"
+      item-title="title"
+      item-value="value"
+      @update:model-value="onChangeDisableTime()"
+    ></v-select>
+  </v-container>
 </template>
 <script lang="ts">
 import { mdiAllInclusive, mdiCog, mdiTimerOutline } from '@mdi/js'
-import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import {
   AdGuardSettingsDefaults,
-  StorageService
+  StorageService,
 } from '../../../../service/StorageService'
 import {
   BadgeService,
-  ExtensionBadgeTextEnum
+  ExtensionBadgeTextEnum,
 } from '../../../../service/BadgeService'
 import TabService from '../../../../service/TabService'
 import AdGuardApiService from '../../../../service/AdGuardApiService'
@@ -76,17 +67,17 @@ import useTranslation from '../../../../hooks/translation'
 
 export default defineComponent({
   name: 'PopupStatusCardComponent',
-  model: { prop: 'isActiveByStatus', event: 'updateStatus' },
   props: {
-    isActiveByStatus: {
+    modelValue: {
       type: Boolean,
-      required: true
+      required: true,
     },
     isActiveByBadge: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
+  emits: ['update:modelValue'],
   setup: (props, { emit }) => {
     const sliderChecked = ref(props.isActiveByBadge)
     const sliderDisabled = ref(!props.isActiveByBadge)
@@ -94,26 +85,26 @@ export default defineComponent({
     const protectionDisabledDuration = ref(0)
     const beautifyDisabledDuration = ref('')
     const disablePeriodSelect = ref([
-      {title:'∞ Until turned on', value:0},
-      {title:'30 secs', value:30*1000},
-      {title:'1 min', value:60*1000},
-      {title:'10 min', value:10*60*1000},
-      {title:'1 hr', value:60*60*1000},
-      {title:'24 hrs', value:24*60*60*1000},
-    ]);
+      { title: '∞ Until turned on', value: 0 },
+      { title: '30 secs', value: 30 * 1000 },
+      { title: '1 min', value: 60 * 1000 },
+      { title: '10 min', value: 10 * 60 * 1000 },
+      { title: '1 hr', value: 60 * 60 * 1000 },
+      { title: '24 hrs', value: 24 * 60 * 60 * 1000 },
+    ])
 
-    let intervalId:number;
+    let intervalId: number
 
     const defaultDisableTime = ref<number>(
-      AdGuardSettingsDefaults.default_disable_time
+      AdGuardSettingsDefaults.default_disable_time,
     )
 
     const timeUnitIcon = computed(() =>
-      defaultDisableTime.value < 1 ? mdiAllInclusive : mdiTimerOutline
+      defaultDisableTime.value < 1 ? mdiAllInclusive : mdiTimerOutline,
     )
 
     const updateDefaultDisableTime = () => {
-      StorageService.getDefaultDisableTime().then(time => {
+      StorageService.getDefaultDisableTime().then((time) => {
         if (typeof time !== 'undefined') {
           defaultDisableTime.value = time
         }
@@ -126,74 +117,73 @@ export default defineComponent({
         sliderChecked.value = false
         sliderDisabled.value = false
         BadgeService.setBadgeText(ExtensionBadgeTextEnum.disabled)
-        emit('updateStatus', false)
+        emit('update:modelValue', false)
       } else if (currentStatus === AdGuardApiStatusEnum.enabled) {
         defaultDisableTimeDisabled.value = false
         sliderDisabled.value = false
         sliderChecked.value = true
         BadgeService.setBadgeText(ExtensionBadgeTextEnum.enabled)
-        emit('updateStatus', true)
+        emit('update:modelValue', true)
       } else {
         defaultDisableTimeDisabled.value = true
         sliderDisabled.value = true
         sliderChecked.value = false
         BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
-        emit('updateStatus', false)
+        emit('update:modelValue', false)
       }
     }
     const showTimerDisabledDuration = () => {
-      clearInterval(intervalId);
-      let duration = Math.trunc(protectionDisabledDuration.value / 1000);
-      const MINUTE=60;
-      const HOUR=MINUTE * 60;
-      const DAY=HOUR * 24;
-      const TIMEOUT=1000;
+      clearInterval(intervalId)
+      let duration = Math.trunc(protectionDisabledDuration.value / 1000)
+      const MINUTE = 60
+      const HOUR = MINUTE * 60
+      const DAY = HOUR * 24
+      const TIMEOUT = 1000
 
-      const convertString = () =>{
-        let str = '';
-        let d = duration;
+      const convertString = () => {
+        let str = ''
+        let d = duration
         if (d > DAY) {
-          str += `${Math.trunc(d / DAY)}d:`;
-          d %= DAY;
+          str += `${Math.trunc(d / DAY)}d:`
+          d %= DAY
         }
-        if(d > HOUR){
-          str += `${Math.trunc(d / HOUR)}h:`;
-          d %= HOUR;
+        if (d > HOUR) {
+          str += `${Math.trunc(d / HOUR)}h:`
+          d %= HOUR
         }
-        if(d > MINUTE){
-          str += `${Math.trunc(d / MINUTE)}m:`;
-          d %= MINUTE;
+        if (d > MINUTE) {
+          str += `${Math.trunc(d / MINUTE)}m:`
+          d %= MINUTE
         }
-        if(d>0){
-          str+=`${d}s`;
+        if (d > 0) {
+          str += `${d}s`
         }
-        beautifyDisabledDuration.value = str;
-        duration--;
+        beautifyDisabledDuration.value = str
+        duration--
       }
 
-      convertString();
-      intervalId = setInterval( () => {
-        convertString();
-      if(duration <=0){
-        clearInterval(intervalId);
-      }
-      }, TIMEOUT);
-
-
+      convertString()
+      intervalId = setInterval(() => {
+        convertString()
+        if (duration <= 0) {
+          clearInterval(intervalId)
+        }
+      }, TIMEOUT)
     }
 
     const checkProtectionDuration = () => {
-      AdGuardApiService.getAdGuardStatus().then(status => {
+      AdGuardApiService.getAdGuardStatus().then((status) => {
         if (status?.length > 0) {
           // here am hardcoding to get the status of only the first instance.
           if (status[0].protection_disabled_duration > 0) {
-            protectionDisabledDuration.value = status[0].protection_disabled_duration
+            protectionDisabledDuration.value =
+              status[0].protection_disabled_duration
             showTimerDisabledDuration()
             return
           }
         }
-        protectionDisabledDuration.value = 0;
-        showTimerDisabledDuration();
+        protectionDisabledDuration.value = 0
+        showTimerDisabledDuration()
       })
     }
 
@@ -211,7 +201,7 @@ export default defineComponent({
       }
 
       AdGuardApiService.getAdGuardStatusCombined()
-        .then(value => {
+        .then((value) => {
           updateComponentsByData(value)
           // if the current status is disabled then if there is a protection_disabled_duration available
           if (value === AdGuardApiStatusEnum.disabled) {
@@ -223,19 +213,19 @@ export default defineComponent({
 
     const onSliderClickSuccessHandler = () => {
       AdGuardApiService.getAdGuardStatusCombined()
-        .then(data => {
+        .then((data) => {
           updateComponentsByData(data)
           checkProtectionDuration()
           if (data === AdGuardApiStatusEnum.disabled) {
             const reloadAfterDisableCallback = (
-              is_enabled: boolean | undefined
+              is_enabled: boolean | undefined,
             ) => {
               if (typeof is_enabled !== 'undefined' && is_enabled) {
                 TabService.reloadCurrentTab(1000)
               }
             }
             StorageService.getReloadAfterDisable().then(
-              reloadAfterDisableCallback
+              reloadAfterDisableCallback,
             )
           }
         })
@@ -244,7 +234,7 @@ export default defineComponent({
 
     const throwConsoleBadgeError = (
       error_message: string,
-      refresh_status: boolean = false
+      refresh_status: boolean = false,
     ) => {
       console.warn(error_message)
 
@@ -252,14 +242,13 @@ export default defineComponent({
       if (refresh_status) {
         setTimeout(() => {
           AdGuardApiService.getAdGuardStatusCombined()
-            .then(data => updateComponentsByData(data))
+            .then((data) => updateComponentsByData(data))
             .catch(() => updateComponentsByData(AdGuardApiStatusEnum.error))
         }, 1500)
       }
     }
 
     const openOptions = () => {
-      // eslint-disable-next-line no-undef
       chrome.runtime.openOptionsPage()
     }
     const sliderClicked = () => {
@@ -268,36 +257,36 @@ export default defineComponent({
         : AdGuardApiStatusEnum.disabled
 
       const time: number = defaultDisableTime.value
-      clearInterval(intervalId);
-      protectionDisabledDuration.value=0;
+      clearInterval(intervalId)
+      protectionDisabledDuration.value = 0
 
       if (time >= 0) {
         AdGuardApiService.changeAdGuardStatus(currentMode, time)
-          .then(value => {
+          .then((value) => {
             for (const adGuardStatus of value) {
               if (adGuardStatus !== 'OK') {
                 throwConsoleBadgeError(
                   `Change status failed in one or more adGuard instance(s): Error:${adGuardStatus}`,
-                  true
+                  true,
                 )
                 return
               }
             }
             onSliderClickSuccessHandler()
           })
-          .catch(reason => {
+          .catch((reason) => {
             throwConsoleBadgeError(reason)
           })
       } else {
         throwConsoleBadgeError(
           'Time cannot be smaller than 0. Canceling api request.',
-          true
+          true,
         )
       }
     }
     const onChangeDisableTime = () => {
-      sliderChecked.value = false;
-      sliderClicked();
+      sliderChecked.value = false
+      sliderClicked()
     }
 
     onMounted(() => {
@@ -319,8 +308,8 @@ export default defineComponent({
       mdiCog,
       sliderClicked,
       openOptions,
-      ...useTranslation()
+      ...useTranslation(),
     }
-  }
+  },
 })
 </script>

@@ -4,13 +4,7 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  onMounted,
-  PropType,
-  ref,
-  watch
-} from '@vue/composition-api'
+import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import useTranslation from '../../../../hooks/translation'
 import { I18NOptionKeys } from '../../../../service/i18NService'
 
@@ -19,18 +13,18 @@ export default defineComponent({
   props: {
     labelTextKey: {
       type: String as PropType<I18NOptionKeys>,
-      required: true
+      required: true,
     },
     getterFunction: {
       type: Function as PropType<() => Promise<boolean | undefined>>,
-      required: true
+      required: true,
     },
     setterFunction: {
       type: Function as PropType<(value: boolean) => void>,
-      required: true
-    }
+      required: true,
+    },
   },
-  setup: props => {
+  setup: (props) => {
     const { translate } = useTranslation()
 
     const isChecked = ref(false)
@@ -53,6 +47,6 @@ export default defineComponent({
       props.setterFunction(isChecked.value)
     })
     return { translate, isChecked }
-  }
+  },
 })
 </script>

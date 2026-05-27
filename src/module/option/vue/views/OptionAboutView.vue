@@ -1,15 +1,12 @@
 <template>
   <div>
     <h1 class="mb-5">
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-img src="icon/icon-128.png" />
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title class="text-h5">
-            AdGuard Home
-          </v-list-item-title>
-        </v-list-item-content>
+      <v-list-item title="AdGuard Home">
+        <template #prepend>
+          <v-avatar>
+            <v-img src="icon/icon-128.png" />
+          </v-avatar>
+        </template>
       </v-list-item>
     </h1>
 
@@ -18,12 +15,12 @@
     </h2>
     <OptionAboutExtension class="mb-5" />
     <OptionAboutReportIssue class="mb-5" />
-    <OptionAboutDisclaimer  />
+    <OptionAboutDisclaimer />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 import useTranslation from '../../../../hooks/translation'
 import OptionAboutReportIssue from '../about/OptionAboutReportIssue.vue'
 import OptionAboutExtension from '../about/OptionAboutExtension.vue'
@@ -34,8 +31,8 @@ export default defineComponent({
   components: {
     OptionAboutDisclaimer,
     OptionAboutReportIssue,
-    OptionAboutExtension
+    OptionAboutExtension,
   },
-  setup: () => ({ ...useTranslation() })
+  setup: () => ({ ...useTranslation() }),
 })
 </script>

@@ -1,21 +1,21 @@
 <template>
   <v-app id="popup">
-      <PopupStatusCardComponent
-        v-if="isActiveByBadgeLoaded"
-        v-model="isActiveByRealStatus"
-        :is-active-by-badge="isActiveByBadge"
-        class=""
-      />
-      <PopupUpdateAlertComponent v-if="!isActiveByRealStatus" />
+    <PopupStatusCardComponent
+      v-if="isActiveByBadgeLoaded"
+      v-model="isActiveByRealStatus"
+      :is-active-by-badge="isActiveByBadge"
+      class=""
+    />
+    <PopupUpdateAlertComponent v-if="!isActiveByRealStatus" />
   </v-app>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@vue/composition-api'
+import { defineComponent, onMounted, ref } from 'vue'
 import PopupStatusCardComponent from '../components/PopupStatusCardComponent.vue'
 import {
   BadgeService,
-  ExtensionBadgeTextEnum
+  ExtensionBadgeTextEnum,
 } from '../../../../service/BadgeService'
 import PopupUpdateAlertComponent from '../components/PopupUpdateAlertComponent.vue'
 import TabService from '../../../../service/TabService'
@@ -24,7 +24,7 @@ export default defineComponent({
   name: 'PopupComponent',
   components: {
     PopupUpdateAlertComponent,
-    PopupStatusCardComponent
+    PopupStatusCardComponent,
   },
   setup: () => {
     const isActiveByBadge = ref(false)
@@ -46,7 +46,6 @@ export default defineComponent({
       }
     }
 
-
     onMounted(() => {
       updateIsActiveByBadge()
       updateCurrentUrl()
@@ -58,13 +57,13 @@ export default defineComponent({
       isActiveByBadgeLoaded,
       isActiveByRealStatus,
     }
-  }
+  },
 })
 </script>
 
 <style lang="scss">
 #popup {
-width: 300px;
-height: 350px;
+  width: 300px;
+  height: 350px;
 }
 </style>

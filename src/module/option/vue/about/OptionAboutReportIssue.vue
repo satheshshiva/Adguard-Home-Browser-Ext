@@ -7,8 +7,8 @@
       <v-btn class="mb-1" @click="openGithubReport">
         {{ translate(I18NOptionKeys.option_report_error_github) }}
       </v-btn>
-      <br>
-      <br>
+      <br />
+      <br />
       <p>{{ translate(I18NOptionKeys.option_about_copy_debug) }}</p>
       <p ref="versionInfoElement">
         AdGuard Home Control: {{ extensionVersion }} <br />Operating System:
@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref } from 'vue'
 import { mdiContentCopy } from '@mdi/js'
 import useTranslation from '../../../../hooks/translation'
 
@@ -40,13 +40,12 @@ export default defineComponent({
 
     const platform = computed(() => window.navigator.platform)
     const extensionVersion = computed(
-      // eslint-disable-next-line no-undef
-      () => chrome.runtime.getManifest().version
+      () => chrome.runtime.getManifest().version,
     )
     const browser = computed(() => {
       if (navigator.userAgent.indexOf('Firefox') > -1) {
         return `Mozilla Firefox ${navigator.userAgent.substr(
-          navigator.userAgent.lastIndexOf('/') + 1
+          navigator.userAgent.lastIndexOf('/') + 1,
         )}`
       }
       if (navigator.userAgent.indexOf('Edg') > -1) {
@@ -60,7 +59,7 @@ export default defineComponent({
         startPos = navigator.userAgent.indexOf('/', startPos) + 1
         const version = navigator.userAgent.substring(
           startPos,
-          navigator.userAgent.indexOf('Safari')
+          navigator.userAgent.indexOf('Safari'),
         )
         return `Chrome/Chromium ${version}`
       }
@@ -81,8 +80,8 @@ export default defineComponent({
       copyToClipboard,
       platform,
       versionInfoElement,
-      mdiContentCopy
+      mdiContentCopy,
     }
-  }
+  },
 })
 </script>
