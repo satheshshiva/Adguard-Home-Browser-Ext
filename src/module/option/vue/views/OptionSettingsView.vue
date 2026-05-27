@@ -1,17 +1,13 @@
 <template>
   <div>
-
     <h1 class="mb-5">
-    <v-list-item>
-      <v-list-item-avatar>
-        <v-img src="icon/icon-128.png"   />
-      </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title class="text-h5">
-                  AdGuard Home
-                </v-list-item-title>
-              </v-list-item-content>
-    </v-list-item>
+      <v-list-item title="AdGuard Home">
+        <template #prepend>
+          <v-avatar>
+            <v-img src="icon/icon-128.png" />
+          </v-avatar>
+        </template>
+      </v-list-item>
     </h1>
     <h2 class="mb-5">
       {{ translate(I18NOptionKeys.options_settings) }}
@@ -51,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from '@vue/composition-api'
+import { computed, defineComponent } from 'vue'
 import { I18NOptionKeys } from '../../../../service/i18NService'
 import { StorageService } from '../../../../service/StorageService'
 import MessageBusService from '../../../../service/MessageBusService'
@@ -65,7 +61,7 @@ export default defineComponent({
   components: {
     OptionDisableTimeComponent,
     OptionTabComponent,
-    OptionCheckboxComponent
+    OptionCheckboxComponent,
   },
   setup: () => {
     const { translate } = useTranslation()
@@ -75,7 +71,7 @@ export default defineComponent({
         labelTextKey: I18NOptionKeys.options_reload_after_disable,
         getterFunction: () => StorageService.getReloadAfterDisable(),
         setterFunction: (value: boolean) =>
-          StorageService.saveReloadAfterDisable(value)
+          StorageService.saveReloadAfterDisable(value),
       },
       {
         labelTextKey: I18NOptionKeys.option_disable_context_menu,
@@ -83,16 +79,15 @@ export default defineComponent({
         setterFunction: (value: boolean) => {
           MessageBusService.sendContextMenuSwitchMessage(value)
           StorageService.saveDisableContextMenu(value)
-        }
-      }
+        },
+      },
     ]
 
     const isFirefox = computed(() => typeof browser !== 'undefined')
 
     const openHotKeySettings = () => {
-      // eslint-disable-next-line no-undef
       chrome.tabs.create({
-        url: 'chrome://extensions/shortcuts'
+        url: 'chrome://extensions/shortcuts',
       })
     }
 
@@ -101,9 +96,9 @@ export default defineComponent({
       isFirefox,
       checkboxOptions,
       translate,
-      I18NOptionKeys
+      I18NOptionKeys,
     }
-  }
+  },
 })
 
 /**

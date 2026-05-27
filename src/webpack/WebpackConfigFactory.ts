@@ -1,9 +1,9 @@
-import { Configuration } from 'webpack'
+import { Configuration, DefinePlugin } from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import ZipPlugin from 'zip-webpack-plugin'
 import * as path from 'path'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
-import VueLoaderPlugin from 'vue-loader/lib/plugin'
+import { VueLoaderPlugin } from 'vue-loader'
 import ESLintWebpackPlugin from 'eslint-webpack-plugin'
 
 export class WebpackConfigFactory {
@@ -57,7 +57,7 @@ export class WebpackConfigFactory {
       resolve: {
         extensions: ['.js', '.ts', '.vue'],
         alias: {
-          vue$: 'vue/dist/vue.esm.js'
+          vue$: 'vue/dist/vue.runtime.esm-bundler.js'
         }
       },
       optimization: {
@@ -108,6 +108,11 @@ export class WebpackConfigFactory {
           chunks: ['background']
         }),
         new VueLoaderPlugin(),
+        new DefinePlugin({
+          __VUE_OPTIONS_API__: 'true',
+          __VUE_PROD_DEVTOOLS__: 'false',
+          __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false'
+        }),
         new ESLintWebpackPlugin({
           extensions: ['ts', 'vue']
         })

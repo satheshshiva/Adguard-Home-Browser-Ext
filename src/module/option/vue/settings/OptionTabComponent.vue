@@ -4,27 +4,28 @@
       <v-tab
         v-for="(adguard_settings, index) in tabs"
         :key="'dyn-tab-' + index"
+        :value="index"
         @click="resetConnectionCheckAndCheck"
       >
         Instance {{ index + 1 }}
       </v-tab>
     </v-tabs>
-    <v-tabs-items v-model="currentTab">
-      <v-tab-item
+    <v-window v-model="currentTab">
+      <v-window-item
         v-for="(adguard_settings, index) in tabs"
         :key="index"
+        :value="index"
         class="mt-5"
       >
         <v-text-field
           v-model="adguard_settings.adguard_uri_base"
           v-debounce:500ms="connectionCheck"
-          outlined
-          debounce-events="input"
+          variant="outlined"
           :placeholder="AdGuardSettingsDefaults.adguard_uri_base"
           :rules="[
-            v =>
+            (v) =>
               isInvalidUrlSchema(v) ||
-              translate(I18NOptionKeys.options_url_invalid_warning)
+              translate(I18NOptionKeys.options_url_invalid_warning),
           ]"
           :label="translate(I18NOptionKeys.options_pi_hole_address)"
           required
@@ -32,20 +33,19 @@
         <v-text-field
           v-model="adguard_settings.username"
           v-debounce:500ms="connectionCheck"
-          outlined
+          variant="outlined"
           :label="translate(I18NOptionKeys.options_username)"
         ></v-text-field>
         <v-text-field
           v-model="adguard_settings.password"
           v-debounce:500ms="connectionCheck"
-          outlined
+          variant="outlined"
           :type="passwordInputType"
-          :append-icon="
+          :append-inner-icon="
             passwordInputType === 'password' ? mdiEyeOutline : mdiEyeOffOutline
           "
-          
           :label="translate(I18NOptionKeys.options_password)"
-          @click:append="toggleApiKeyVisibility"
+          @click:append-inner="toggleApiKeyVisibility"
         ></v-text-field>
 
         <div class="mb-5">
@@ -57,12 +57,16 @@
             @click.prevent="removeInstance(currentTab)"
             >{{
               translate(I18NOptionKeys.options_remove_button, [
-                String(currentTab + 1)
+                String(currentTab + 1),
               ])
             }}
           </v-btn>
         </div>
-        <v-alert v-if="connectionCheckStatus === 'IDLE'" outlined type="info">
+        <v-alert
+          v-if="connectionCheckStatus === 'IDLE'"
+          variant="outlined"
+          type="info"
+        >
           {{ translate(I18NOptionKeys.option_connection_check_idle) }}
           <v-progress-circular
             color="primary"
@@ -71,32 +75,34 @@
             :width="2"
           />
         </v-alert>
-        <v-alert v-if="connectionCheckStatus === 'OK'" type="success" outlined>
+        <v-alert
+          v-if="connectionCheckStatus === 'OK'"
+          type="success"
+          variant="outlined"
+        >
           {{ translate(I18NOptionKeys.option_connection_check_ok) }}<br />
           {{ connectionCheckVersionText }}
         </v-alert>
-        <v-alert v-if="connectionCheckStatus === 'ERROR'" outlined type="error">
+        <v-alert
+          v-if="connectionCheckStatus === 'ERROR'"
+          variant="outlined"
+          type="error"
+        >
           {{ translate(I18NOptionKeys.option_connection_check_error) }}<br />
-          {{checkErrorMsg()}}
+          {{ checkErrorMsg() }}
         </v-alert>
-      </v-tab-item>
-    </v-tabs-items>
+      </v-window-item>
+    </v-window>
   </div>
 </template>
 
 <script lang="ts">
 import { debounce } from 'vue-debounce'
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  ref,
-  watch
-} from '@vue/composition-api'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { mdiEyeOffOutline, mdiEyeOutline } from '@mdi/js'
 import {
   AdGuardSettingsStorage,
-  StorageService
+  StorageService,
 } from '../../../../service/StorageService'
 import { AdGuardVersion } from '../../../../api/models/AdGuardVersion'
 import AdGuardApiService from '../../../../service/AdGuardApiService'
@@ -105,12 +111,12 @@ import useTranslation from '../../../../hooks/translation'
 enum ConnectionCheckStatus {
   OK = 'OK',
   ERROR = 'ERROR',
-  IDLE = 'IDLE'
+  IDLE = 'IDLE',
 }
 
 enum PasswordInputType {
   password = 'password',
-  text = 'text'
+  text = 'text',
 }
 
 export default defineComponent({
@@ -120,8 +126,8 @@ export default defineComponent({
       {
         adguard_uri_base: '',
         username: '',
-        password: ''
-      }
+        password: '',
+      },
     ])
 
     const currentTab = ref(0)
@@ -129,9 +135,9 @@ export default defineComponent({
     const passwordInputType = ref<PasswordInputType>(PasswordInputType.password)
 
     const connectionCheckStatus = ref<ConnectionCheckStatus>(
-      ConnectionCheckStatus.IDLE
+      ConnectionCheckStatus.IDLE,
     )
-    let errorMsg:string="null"
+    let errorMsg: string = 'null'
 
     const connectionCheckData = ref<AdGuardVersion | null>(null)
 
@@ -140,18 +146,18 @@ export default defineComponent({
     const connectionCheck = () => {
       connectionCheckStatus.value = ConnectionCheckStatus.IDLE
       AdGuardApiService.getAdGuardVersion(currentSelectedSettings.value)
-        .then(result => {
+        .then((result) => {
           if (typeof result === 'object') {
             connectionCheckStatus.value = ConnectionCheckStatus.OK
             connectionCheckData.value = result
-            errorMsg=""
+            errorMsg = ''
           } else {
             connectionCheckStatus.value = ConnectionCheckStatus.ERROR
-            errorMsg=`Unexpected response from server: ${result}`
+            errorMsg = `Unexpected response from server: ${result}`
           }
         })
         .catch((e) => {
-          errorMsg=`${e}`
+          errorMsg = `${e}`
           console.warn(errorMsg)
           connectionCheckStatus.value = ConnectionCheckStatus.ERROR
         })
@@ -184,27 +190,31 @@ export default defineComponent({
       () => {
         for (const adGuardSetting of tabs.value) {
           if (typeof adGuardSetting.adguard_uri_base !== 'undefined') {
-            adGuardSetting.adguard_uri_base = adGuardSetting.adguard_uri_base.replace(
-              /\s+/g,
-              ''
-            )
+            adGuardSetting.adguard_uri_base =
+              adGuardSetting.adguard_uri_base.replace(/\s+/g, '')
           } else {
             adGuardSetting.adguard_uri_base = ''
           }
           if (typeof adGuardSetting.username !== 'undefined') {
-            adGuardSetting.username = adGuardSetting.username.replace(/\s+/g, '')
+            adGuardSetting.username = adGuardSetting.username.replace(
+              /\s+/g,
+              '',
+            )
           } else {
             adGuardSetting.username = ''
           }
           if (typeof adGuardSetting.password !== 'undefined') {
-            adGuardSetting.password = adGuardSetting.password.replace(/\s+/g, '')
+            adGuardSetting.password = adGuardSetting.password.replace(
+              /\s+/g,
+              '',
+            )
           } else {
             adGuardSetting.password = ''
           }
         }
         StorageService.saveAdGuardSettingsArray(tabs.value)
       },
-      { deep: true }
+      { deep: true },
     )
 
     const checkErrorMsg = () => errorMsg
@@ -254,8 +264,8 @@ export default defineComponent({
       connectionCheckStatus,
       connectionCheckData,
       checkErrorMsg,
-      ...useTranslation()
+      ...useTranslation(),
     }
-  }
+  },
 })
 </script>

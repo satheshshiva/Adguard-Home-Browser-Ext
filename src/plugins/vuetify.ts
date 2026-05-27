@@ -1,48 +1,38 @@
-import Vue from 'vue'
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
-import { UserVuetifyPreset } from 'vuetify/types/services/presets'
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 
-Vue.use(Vuetify)
-
-let darkTheme = false
-
-if (
+const darkTheme =
   window.matchMedia &&
   window.matchMedia('(prefers-color-scheme: dark)').matches
-) {
-  darkTheme = true
+
+const themeColors = {
+  primary: '#ff5023',
+  secondary: '#91dc5a',
+  accent: '#3f51b5',
+  error: '#e91e63',
+  warning: '#ffeb3b',
+  info: '#607d8b',
+  success: '#4caf50'
 }
 
-const opts: Partial<UserVuetifyPreset> = {
+const vuetify = createVuetify({
+  components,
+  directives,
   icons: {
-    iconfont: 'mdiSvg'
+    defaultSet: 'mdi',
+    aliases,
+    sets: { mdi }
   },
   theme: {
-    dark: darkTheme,
+    defaultTheme: darkTheme ? 'dark' : 'light',
     themes: {
-      dark: {
-        primary: '#ff5023',
-        secondary: '#91dc5a',
-        accent: '#3f51b5',
-        error: '#e91e63',
-        warning: '#ffeb3b',
-        info: '#607d8b',
-        success: '#4caf50'
-      },
-      light: {
-        primary: '#ff5023',
-        secondary: '#91dc5a',
-        accent: '#3f51b5',
-        error: '#e91e63',
-        warning: '#ffeb3b',
-        info: '#607d8b',
-        success: '#4caf50'
-      }
+      dark: { dark: true, colors: themeColors },
+      light: { dark: false, colors: themeColors }
     }
   }
-}
-
-const vuetify = new Vuetify(opts)
+})
 
 export default vuetify
