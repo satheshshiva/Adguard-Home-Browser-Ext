@@ -10,11 +10,11 @@
         </h2>
       </div>
       <v-icon
+        :icon="mdiCog"
         class="ms-auto"
         :title="translate(I18NOptionKeys.options_settings)"
         @click="openOptions"
-        >{{ mdiCog }}
-      </v-icon>
+      ></v-icon>
     </div>
     <div class="d-flex flex justify-center mt-5">
       <v-switch

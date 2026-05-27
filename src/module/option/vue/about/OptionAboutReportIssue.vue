@@ -15,9 +15,7 @@
         {{ platform }} <br />Browser: {{ browser }}
       </p>
       <v-btn @click="copyToClipboard">
-        <v-icon>
-          {{ mdiContentCopy }}
-        </v-icon>
+        <v-icon :icon="mdiContentCopy"></v-icon>
       </v-btn>
     </v-card-text>
   </v-card>
