@@ -31,7 +31,7 @@ export default class HttpService {
           reject(<T>str);
         }
         break;
-      case 403:
+      case 401:case 403:
         reject("Unauthorized: Please check credentials.")
         break;
       default:
@@ -40,23 +40,29 @@ export default class HttpService {
 
   }
 
-  private static httpHeadersGet(u:string, p:string)   {
+  // credentials:'omit' is essential. AdGuard Home ignores the Authorization
+  // header whenever an agh_session cookie is present on the request (even an
+  // expired one), so if the browser's cookie jar for the AdGuard host leaks
+  // into these fetches the extension breaks as soon as the web-UI session
+  // expires. Never send cookies; always authenticate with Basic Auth.
+  private static httpHeadersGet(u:string, p:string): RequestInit {
     return {
       method: "GET",
+      mode: "cors",
+      credentials: "omit",
       headers: {
-        "mode": "cors",
-        "Content-Type": "application/json",
         "Authorization": 'Basic ' + btoa(`${u}:${p}`),
       }
     }
   }
 
-  private static httpHeadersPost(body:string, u:string, p:string)   {
+  private static httpHeadersPost(body:string, u:string, p:string): RequestInit {
     return {
       method: 'POST',
+      mode: "cors",
+      credentials: "omit",
       body: body,
       headers: {
-        "mode": "cors",
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + btoa(`${u}:${p}`),
       },
